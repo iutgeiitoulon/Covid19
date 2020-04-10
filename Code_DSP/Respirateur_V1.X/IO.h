@@ -11,6 +11,8 @@
 #define STEP _LATC6
 #define DIR _LATA9
 #define ELECTROVANNE _LATB5
+#define FIN_COURSE1 PORTBbits.RB3
+#define FIN_COURSE2 PORTBbits.RB2
 
 /*******************************************************************************
  * Prototypes fonctions
@@ -18,5 +20,5 @@
 void InitIO();
 void LockIO();
 void UnlockIO();
-
+void InitCN(void);
 #endif	/* IO_H */

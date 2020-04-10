@@ -6,7 +6,7 @@ void InitOC1(void)
 {
     OC1CONbits.OCTSEL=0;            //Select Timer2 Clock
     OC1CONbits.OCM=0b000;           //Disable OC Module
-    OC1R=100;
+    OC1R=10;
 }
 
 void OC1GeneratePulse()

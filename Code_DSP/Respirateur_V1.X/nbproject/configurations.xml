@@ -5,13 +5,15 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>IO.h</itemPath>
-      <itemPath>timer.h</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>pragma_config.h</itemPath>
       <itemPath>oscillator.h</itemPath>
       <itemPath>PWM.h</itemPath>
       <itemPath>Toolbox.h</itemPath>
       <itemPath>OutputCompare.h</itemPath>
+      <itemPath>UTLN_Timers.h</itemPath>
+      <itemPath>UTLN_Typedefs.h</itemPath>
+      <itemPath>ADC.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -22,11 +24,13 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>IO.c</itemPath>
-      <itemPath>timer.c</itemPath>
       <itemPath>oscillator.c</itemPath>
       <itemPath>PWM.c</itemPath>
       <itemPath>Toolbox.c</itemPath>
       <itemPath>OutputCompare.c</itemPath>
+      <itemPath>UTLN_Timers.c</itemPath>
+      <itemPath>UTLN_Typedefs.c</itemPath>
+      <itemPath>ADC.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

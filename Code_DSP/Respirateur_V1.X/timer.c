@@ -61,32 +61,7 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void)
     if(subdiv2>=10)
     {
         subdiv2=0;
-        PWM2SetSpeedConsigne(vitesseMoteurPAP+0.5);
     }
-    
-//    if(sens)
-//    {
-//        DIR=1;
-//        if(vitesseMoteurPAP<300)
-//            vitesseMoteurPAP++;
-//        else if(vitesseMoteurPAP==300)
-//            sens=0;
-//    }
-//    else
-//    {
-//        DIR=0;
-//        if(vitesseMoteurPAP>-300)
-//            vitesseMoteurPAP--;
-//        else if(vitesseMoteurPAP==-300)
-//        {
-//            sens=1;
-//        }
-//    }
-//    
-//    if(subDiv<3)
-//        subDiv=3;
-//    }
-
 
 }
 
@@ -138,18 +113,36 @@ int countTimer2 = 0;
 //Interruption du timer 2
 
 double cpt=0;
+double amplitudeMax=1000;
+double amplitudeMin=0;
 void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void)
 {
     IFS0bits.T2IF = 0;
-    PWM2UpdatePeriod();
-    cpt++;
-    if(cpt>subDiv)
+
+    if(sens)
     {
-       // OC1GeneratePulse();
-        if(cpt==1000)
+        //Si on es dans le sens positif
+        OC1GeneratePulse(); //On genere un pulse
+        cpt++;              //On incremente le compteur
+        
+        if(cpt>=amplitudeMax)
         {
-            cpt=0;
+            //Si on a atteint l'amplitude Max, on change le sens
             DIR=!DIR;
+            sens=0;
+        }
+    }
+    else
+    {
+        //Si on es dans le sens negatif
+        OC1GeneratePulse(); //On genere un pulse
+        cpt--;              //On decremente le compteur
+        
+        if(cpt<=amplitudeMin)
+        {
+            //Si on a atteint l'amplitude Min, on change le sens
+            DIR=!DIR;
+            sens=1;
         }
     }
 }
