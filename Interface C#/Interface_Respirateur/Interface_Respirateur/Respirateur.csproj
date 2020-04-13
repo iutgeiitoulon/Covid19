@@ -57,6 +57,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EventArgsLibrary\EventArgsLibrary.csproj">
+      <Project>{9c46a7c0-4675-41be-b282-e6f0825ad73e}</Project>
+      <Name>EventArgsLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ExtendedSerialPort\ExtendedSerialPort\ExtendedSerialPort.csproj">
+      <Project>{21ac599e-e3d5-4181-aa0f-7c2e00cca016}</Project>
+      <Name>ExtendedSerialPort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\HighFreqTimer\AdvancedTimers.csproj">
+      <Project>{ecc907ed-f9b2-457f-901e-720987934e47}</Project>
+      <Name>AdvancedTimers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MessageDecoder\MessageDecoder.csproj">
+      <Project>{4603885f-cc5e-43e5-a4af-063030cb0a32}</Project>
+      <Name>MessageDecoder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MessageEncoder\MessageEncoder.csproj">
+      <Project>{efafba95-1787-41a9-8f12-14ecd9fe127a}</Project>
+      <Name>MessageEncoder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MessageGenerator\MessageGenerator.csproj">
       <Project>{7f098ee2-a8cd-48cf-b9f4-256ea3df2bc6}</Project>
       <Name>MessageGenerator</Name>
@@ -64,6 +84,10 @@
     <ProjectReference Include="..\..\MessageProcessor\MessageProcessor.csproj">
       <Project>{12c1db8f-4309-43e2-b576-feb50b59ec25}</Project>
       <Name>MessageProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Utilities\Utilities.csproj">
+      <Project>{8e7d0da4-9a13-4b18-a90e-0243bbcce40a}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\WpfRespirateur_Interface\WpfRespirateur_Interface\WpfRespirateur_Interface.csproj">
       <Project>{d35c4eb6-23d1-480b-8a24-4e083b283d69}</Project>

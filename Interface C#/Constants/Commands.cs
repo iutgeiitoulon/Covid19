@@ -13,8 +13,19 @@ namespace Constants
 
         Unknown = 0,
         START=1,
+        ErrorTextMessage=2,
+        DoSteps=3,
+        ResetStepsCounter=4,
+        SetStepsOffsetFromUp = 5,
+        SetStepsOffsetFromDown =6,
+        SetAmplitudeSteps=7,
+        ChangeSpeed=20,
+        SetPauseTimeUp=21,
+        SetPauseTimeDown=22,
 
-        GoToXYTheta = 1000,
+
+        PressureDataFromRespirator=100,
+       
 
         EmergencySTOP=-1,
 
@@ -23,16 +34,5 @@ namespace Constants
         #endregion
     }
 
-    public enum MotorControlName
-    {
-#pragma warning disable CS1591
-        MotorLeft,
-        MotorRear,
-        MotorRight,
-        Motor4,
-        Motor5,
-        Motor6,
-        None
-#pragma warning restore CS1591
-    }
+    
 }

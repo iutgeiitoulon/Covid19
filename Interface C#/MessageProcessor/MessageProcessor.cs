@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using System.Timers;
 using Utilities;
 
-namespace RobotMessageProcessor
+namespace MessageProcessor
 {
-    public class RobotMsgProcessor
+    public class MsgProcessor
     {
         Timer tmrComptageMessage;
-        public RobotMsgProcessor()
+        public MsgProcessor()
         {
             tmrComptageMessage = new Timer(1000);
             tmrComptageMessage.Elapsed += TmrComptageMessage_Elapsed;
@@ -30,11 +30,11 @@ namespace RobotMessageProcessor
         }
 
         //Input CallBack        
-        public void ProcessRobotDecodedMessage(object sender, MessageDecodedArgs e)
+        public void ProcessDecodedMessage(object sender, MessageDecodedArgs e)
         {
             ProcessDecodedMessage((Int16)e.MsgFunction,(Int16) e.MsgPayloadLength, e.MsgPayload);
         }
-        //Processeur de message en provenance du robot...
+        //Processeur de message en provenance du respirateur...
         //Une fois processé, le message sera transformé en event sortant
         public void ProcessDecodedMessage(Int16 command, Int16 payloadLength, byte[] payload)
         {
@@ -44,25 +44,17 @@ namespace RobotMessageProcessor
             {
 
 
-                case (short)Commands.MotorCurrents:
+                case (short)Commands.PressureDataFromRespirator:
                     {
                         uint time2 = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24);
                         byte[] tab2 = payload.GetRange(4, 4);
-                        float motor1Current = tab2.GetFloat();
+                        float sensor1Pressure = tab2.GetFloat();
                         tab2 = payload.GetRange(8, 4);
-                        float motor2Current = tab2.GetFloat();
+                        float sensor2Pressure = tab2.GetFloat();
                         tab2 = payload.GetRange(12, 4);
-                        float motor3Current = tab2.GetFloat();
-                        tab2 = payload.GetRange(16, 4);
-                        float motor4Current = tab2.GetFloat();
-                        tab2 = payload.GetRange(20, 4);
-                        float motor5Current = tab2.GetFloat();
-                        tab2 = payload.GetRange(24, 4);
-                        float motor6Current = tab2.GetFloat();
-                        tab2 = payload.GetRange(28, 4);
-                        float motor7Current = tab2.GetFloat();
+                        float sensorAmbiantPressure = tab2.GetFloat();
                         //On envois l'event aux abonnés
-                        OnMotorsCurrentsFromRobot(time2, motor1Current, motor2Current, motor3Current, motor4Current, motor5Current, motor6Current, motor7Current);
+                        OnPressureDataFromRespirator(time2, sensor1Pressure, sensor2Pressure, sensorAmbiantPressure);
                     }
                     break;
 
@@ -71,31 +63,31 @@ namespace RobotMessageProcessor
                 case (short)Commands.ErrorTextMessage:
                     string errorMsg = Encoding.UTF8.GetString(payload);
                     //On envois l'event aux abonnés
-                    OnErrorTextFromRobot(errorMsg);
+                    OnErrorTextFromRespirateur(errorMsg);
                     break;
                 default: break;
             }
         }
 
-        public event EventHandler<EventArgs> OnWelcomeMessageFromRobotGeneratedEvent;
-        public virtual void OnWelcomeMessageFromRobot()
+
+        public event EventHandler<StringEventArgs> OnErrorTextFromRespirateurGeneratedEvent;
+        public virtual void OnErrorTextFromRespirateur(string str)
         {
-            var handler = OnWelcomeMessageFromRobotGeneratedEvent;
+            var handler = OnErrorTextFromRespirateurGeneratedEvent;
             if (handler != null)
             {
-                handler(this, new EventArgs());
+                handler(this, new StringEventArgs { value = str });
             }
         }
 
-
         //Output events
-        public event EventHandler<IMUDataEventArgs> OnIMURawDataFromRobotGeneratedEvent;
-        public virtual void OnIMUDataFromRobot(uint timeStamp, Point3D accelxyz, Point3D gyroxyz)
+        public event EventHandler<RespirateurDataEventArgs> OnPressureDataFromRespiratorGeneratedEvent;
+        public virtual void OnPressureDataFromRespirator(uint timeStamp, double pressureSensor1, double pressureSensor2, double pressureSensorAmbiant)
         {
-            var handler = OnIMURawDataFromRobotGeneratedEvent;
+            var handler = OnPressureDataFromRespiratorGeneratedEvent;
             if (handler != null)
             {
-                handler(this, new IMUDataEventArgs { EmbeddedTimeStampInMs = timeStamp, accelX = accelxyz.X, accelY = accelxyz.Y, accelZ= accelxyz.Z , gyroX=gyroxyz.X, gyroY=gyroxyz.Y, gyroZ=gyroxyz.Z });
+                handler(this, new RespirateurDataEventArgs { EmbeddedTimeStampInMs = timeStamp, pressureSensor1 = pressureSensor1, pressureSensor2 = pressureSensor2, pressureSensorAmbiant= pressureSensorAmbiant });
             }
         }
 
