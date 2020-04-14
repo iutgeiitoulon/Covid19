@@ -68,7 +68,7 @@ namespace MessageGenerator
         public void GenerateMessageSetSpeed(object sender, DoubleArgs e)
         {
             byte[] payload = new byte[4];
-            payload = e.Value.GetBytes();
+            payload = ((float)(e.Value)).GetBytes();
 
             OnMessageToRespirator((Int16)Commands.ChangeSpeed, 4, payload);
         }
@@ -76,7 +76,7 @@ namespace MessageGenerator
         public void GenerateMessageSetPauseTimeUp(object sender, DoubleArgs e)
         {
             byte[] payload = new byte[4];
-            payload = e.Value.GetBytes();
+            payload = ((float)(e.Value)).GetBytes();
 
             OnMessageToRespirator((Int16)Commands.SetPauseTimeUp, 4, payload);
         }
@@ -84,7 +84,7 @@ namespace MessageGenerator
         public void GenerateMessageSetPauseTimeDown(object sender, DoubleArgs e)
         {
             byte[] payload = new byte[4];
-            payload = e.Value.GetBytes();
+            payload = ((float)(e.Value)).GetBytes();
 
             OnMessageToRespirator((Int16)Commands.SetPauseTimeDown, 4, payload);
         }

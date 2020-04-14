@@ -30,7 +30,7 @@ namespace WpfRespirateur_Interface
         TimeSpan interval = new TimeSpan(0, 0, 0, 0, 50);
         TimeSpan dureeSession = new TimeSpan();
         DateTime dateDebutSession = new DateTime();
-        bool simulate = true;                           //Permet de simuler la carte pour verif affichage
+        bool simulate = false;                           //Permet de simuler la carte pour verif affichage
 
         int? amplitude;
         int? offsetUp;
@@ -109,7 +109,8 @@ namespace WpfRespirateur_Interface
         public void TimerAffichage_Tick(object sender, EventArgs e)
         {
             dureeSession = DateTime.Now.Subtract(dateDebutSession);
-            labelSessionDuree.Content = "Session Time:" + dureeSession.ToString(@"dd\.hh\:mm\:ss");
+            if(isStarted)
+                labelSessionDuree.Content = "Session Time:" + dureeSession.ToString(@"dd\.hh\:mm\:ss");
         }
 
         double zoomFactor = 5;
@@ -175,8 +176,9 @@ namespace WpfRespirateur_Interface
                 {
                     ButtonStartStop.Content = "START";
                     isStarted = false;
-                    labelSessionStop.Content = "Session Stop:" + DateTime.Now.ToString();
                 }
+                    labelSessionStop.Content = "Session Stop:" + DateTime.Now.ToString();
+               
             }
             else
             {
@@ -185,10 +187,11 @@ namespace WpfRespirateur_Interface
                 {
                     ButtonStartStop.Content = "STOP";
                     isStarted = true;
+                }
                     dateDebutSession = DateTime.Now;
                     labelSessionStart.Content = "Session Start:" + dateDebutSession.ToString();
-                    dureeSession = new TimeSpan();
-                }
+                    dureeSession = new TimeSpan(0,0,0,0);
+                
             }
         }
 
@@ -232,6 +235,7 @@ namespace WpfRespirateur_Interface
         {
             oscilloRespiration.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);
             oscilloRespiration.AddPointToLine(1, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2);
+            oscilloRespiration.AddPointToLine(2, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensorAmbiant);
         }
 
 
@@ -296,7 +300,7 @@ namespace WpfRespirateur_Interface
         }
         //Methode appelée sur evenement (event) provenant du port Serie.
         //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
-        public void ActualizeEnableDisableTirButton(object sender, BoolEventArgs e)
+        public void ActualizeStartStopButton(object sender, BoolEventArgs e)
         {
             //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
             //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
@@ -323,7 +327,7 @@ namespace WpfRespirateur_Interface
         }
         //Methode appelée sur evenement (event) provenant du port Serie.
         //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
-        public void ActualizeAmplitudeLabel(object sender, DoubleArgs e)
+        public void ActualizeAmplitudeLabel(object sender, Int32EventArgs e)
         {
             //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
             //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
@@ -331,7 +335,7 @@ namespace WpfRespirateur_Interface
             //La difference entre un Invoke et un beginInvoke est le fait que le Invoke attend la fin de l'execution de l'action avant de sortir.
             labelAmplitude.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
             {
-                labelAmplitude.Content = Convert.ToString(e.Value);                
+                labelAmplitude.Content = Convert.ToString(e.value);                
             }));
         }
 

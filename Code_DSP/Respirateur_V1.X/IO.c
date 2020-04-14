@@ -29,12 +29,19 @@ void InitIO() {
     _TRISC0=1;      //POT1
     _TRISC1=1;      //POT2
     _TRISC2=1;      //POT3
+    
+    _TRISA0=1;       //PRESSURE 1
+    _TRISA1=1;       //PRESSURE 2
     //*************************************************************************/
     //Configuration des pins remappables
     //*************************************************************************/
     UnlockIO();
     
     RPOR11bits.RP22R=0b10010;           //Output compare 1 on RP22
+    
+    RPOR11bits.RP23R=0b00011;           //UART1 TX on SPI_MISO (RP23)
+    RPINR18bits.U1RXR=24;               //UART1 RX on SPI_MOSI (RP24) 
+    
     
     LockIO();
 }

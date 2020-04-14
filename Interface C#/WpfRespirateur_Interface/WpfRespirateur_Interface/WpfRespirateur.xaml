@@ -81,7 +81,7 @@
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
                                     <Button Name="ButtonSetAmplitude" Content="Set" HorizontalAlignment="Stretch" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="2" Grid.ColumnSpan="1" Click="ButtonSetAmplitude_Click"/>
-                                    <xctk:IntegerUpDown Name="myUpDownControlAmplitude"  HorizontalAlignment="Stretch" Margin="5,5,5,5" Grid.Column="1" Maximum="500" Minimum="1" Value="475"  />
+                                    <xctk:IntegerUpDown Name="myUpDownControlAmplitude"  HorizontalAlignment="Stretch" Margin="5,5,5,5" Grid.Column="1" Maximum="10000" Minimum="1" Value="475"  />
                                     <Label Name="labelAmplitude" Content="Curr Val:" HorizontalAlignment="Stretch" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="0" Foreground="White" FontSize="15"/>
                                 </Grid>
                             </GroupBox>

@@ -42,12 +42,45 @@ namespace MessageProcessor
             uint timeStamp;
             switch (command)
             {
+                case (short)Commands.START:
+                    bool started = Convert.ToBoolean(payload[0]);
+                   
+                    OnStartStopCallBackFromRespirator( started);
+                    
+                    break;
+                case (short)Commands.SetAmplitudeSteps:
+                     Int32 amplitude = (payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24);
+                    OnSetAmplitudeCallBackFromRespirator(amplitude);
+                    break;
 
+                case (short)Commands.SetPauseTimeUp:
+                    byte[] tab2 = payload.GetRange(0, 4);
+                    float pauseTimeUp = tab2.GetFloat();
+                    OnSetPauseTimeUpCallBackFromRespirator(pauseTimeUp);
+                    break;
 
+                case (short)Commands.SetPauseTimeDown:
+                    tab2 = payload.GetRange(0, 4);
+                    float pauseTimeDown = tab2.GetFloat();
+                    OnSetPauseTimeDownCallBackFromRespirator(pauseTimeDown);
+                    break;
+                case (short)Commands.SetStepsOffsetFromUp:
+                    Int32 offset = (payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24);
+                    OnSetOffsetUpCallBackFromRespirator(offset);
+                    break;
+                case (short)Commands.SetStepsOffsetFromDown:
+                    offset = (payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24);
+                    OnSetOffsetDownCallBackFromRespirator(offset);
+                    break;
+                case (short)Commands.ChangeSpeed:
+                    tab2 = payload.GetRange(0, 4);
+                    float speed = tab2.GetFloat();
+                    OnSetSpeedCallBackFromRespirator(speed);
+                    break;
                 case (short)Commands.PressureDataFromRespirator:
                     {
                         uint time2 = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24);
-                        byte[] tab2 = payload.GetRange(4, 4);
+                        tab2 = payload.GetRange(4, 4);
                         float sensor1Pressure = tab2.GetFloat();
                         tab2 = payload.GetRange(8, 4);
                         float sensor2Pressure = tab2.GetFloat();
@@ -69,6 +102,75 @@ namespace MessageProcessor
             }
         }
 
+        public event EventHandler<BoolEventArgs> OnStartStopCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnStartStopCallBackFromRespirator(bool started)
+        {
+            var handler = OnStartStopCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new BoolEventArgs { value=started });
+            }
+        }
+
+        public event EventHandler<Int32EventArgs> OnSetAmplitudeCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetAmplitudeCallBackFromRespirator(Int32 amplitude)
+        {
+            var handler = OnSetAmplitudeCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new Int32EventArgs { value = amplitude });
+            }
+        }
+
+        public event EventHandler<DoubleArgs> OnSetPauseTimeUpCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetPauseTimeUpCallBackFromRespirator(double timeUp)
+        {
+            var handler = OnSetPauseTimeUpCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = timeUp });
+            }
+        }
+
+        public event EventHandler<DoubleArgs> OnSetPauseTimeDownCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetPauseTimeDownCallBackFromRespirator(double timeDown)
+        {
+            var handler = OnSetPauseTimeDownCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = timeDown });
+            }
+        }
+
+        public event EventHandler<Int32EventArgs> OnSetOffsetUpCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetOffsetUpCallBackFromRespirator(Int32 offset)
+        {
+            var handler = OnSetOffsetUpCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new Int32EventArgs { value = offset });
+            }
+        }
+
+        public event EventHandler<Int32EventArgs> OnSetOffsetDownCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetOffsetDownCallBackFromRespirator(Int32 offset)
+        {
+            var handler = OnSetOffsetDownCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new Int32EventArgs { value = offset });
+            }
+        }
+
+        public event EventHandler<DoubleArgs> OnSetSpeedCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetSpeedCallBackFromRespirator(double speed)
+        {
+            var handler = OnSetSpeedCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = speed });
+            }
+        }
 
         public event EventHandler<StringEventArgs> OnErrorTextFromRespirateurGeneratedEvent;
         public virtual void OnErrorTextFromRespirateur(string str)

@@ -8,4 +8,8 @@ ADC.h  \
 UTLN_Typedefs.h  \
 UTLN_Timers.h  \
 PWM.h  \
-OutputCompare.h 
+OutputCompare.h  \
+ UTLN_uart.h  \
+UTLN_Communication.h  \
+RespiratorState.h  \
+Define.h 

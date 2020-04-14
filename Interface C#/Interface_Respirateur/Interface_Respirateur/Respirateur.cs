@@ -42,7 +42,7 @@ namespace Interface_Respirateur
               <KeyCode>lwABAQEAAABZVzOfQ0zVAQEAewBDdXN0b21lcj1Vbml2ZXJzaXR5IG9mICBUb3Vsb247T3JkZXJJZD1FRFVDQVRJT05BTC1VU0UtMDEwOTtTdWJzY3JpcHRpb25WYWxpZFRvPTA0LU5vdi0yMDE5O1Byb2R1Y3RDb2RlPVNDLVdQRi1TREstUFJPLVNJVEWDf0QgB8GnCQXI6yAqNM2njjnGbUt2KsujTDzeE+k69K1XYVF1s1x1Hb/i/E3GHaU=</KeyCode>
             </LicenseContract>");
 
-            serialPort1 = new ReliableSerialPort("COM1", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM19", 115200, Parity.None, 8, StopBits.One);
             msgDecoder = new MsgDecoder();
             msgEncoder = new MsgEncoder();
             msgGenerator = new MsgGenerator();
@@ -100,6 +100,15 @@ namespace Interface_Respirateur
             respirateurInterface.OnSetSpeedFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetSpeed;
 
             msgProcessor.OnPressureDataFromRespiratorGeneratedEvent += respirateurInterface.UpdateRespirationDataOnGraph;
+
+            //Callback (confirmation reglage parametres)
+            msgProcessor.OnStartStopCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizeStartStopButton;
+            msgProcessor.OnSetAmplitudeCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizeAmplitudeLabel;
+            msgProcessor.OnSetOffsetDownCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizeOffsetDown;
+            msgProcessor.OnSetOffsetUpCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizeOffsetUp;
+            msgProcessor.OnSetPauseTimeDownCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizePauseTimeDown;
+            msgProcessor.OnSetPauseTimeUpCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizePauseTimeUp;
+            msgProcessor.OnSetSpeedCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizeSpeed;
         }
     }
 }

@@ -14,6 +14,11 @@
       <itemPath>UTLN_Timers.h</itemPath>
       <itemPath>UTLN_Typedefs.h</itemPath>
       <itemPath>ADC.h</itemPath>
+      <itemPath>UTLN_uart.h</itemPath>
+      <itemPath>UTLN_Communication.h</itemPath>
+      <itemPath>Utilities.h</itemPath>
+      <itemPath>Define.h</itemPath>
+      <itemPath>RespiratorState.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -31,6 +36,10 @@
       <itemPath>UTLN_Timers.c</itemPath>
       <itemPath>UTLN_Typedefs.c</itemPath>
       <itemPath>ADC.c</itemPath>
+      <itemPath>UTLN_uart.c</itemPath>
+      <itemPath>UTLN_Communication.c</itemPath>
+      <itemPath>Utilities.c</itemPath>
+      <itemPath>RespiratorState.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
