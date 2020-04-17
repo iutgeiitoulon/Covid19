@@ -15,6 +15,7 @@
 #include "UTLN_Communication.h"
 #include "RespiratorState.h"
 #include "Define.h"
+#include "ustv_i2c_interrupt.h"
 
 #define SENS_MONTEE 1
 #define SENS_DESCENTE 0
@@ -59,6 +60,8 @@ int main(void)
     RegisterTimerWithCallBack(TIMER5_ID, 50.0, Timer5CallBack, true, 4, 1);//Timer Send values
     InitOC1();
     initUART1();
+    
+    InitI2C1();
     
     LED_BLANCHE = 1;
     LED_ROUGE = 1;
@@ -225,7 +228,9 @@ void Timer3CallBack(void)
 void Timer4CallBack(void)
 {
     g_longTimeStamp++;
-    ADC1StartConversionSequence();
+    //ADC1StartConversionSequence();
+    
+   
 }
 void Timer5CallBack(void)
 {
@@ -238,6 +243,10 @@ void Timer5CallBack(void)
     getBytesFromFloat(payload, 8, respiratorState.pressure2);
     getBytesFromFloat(payload, 12, (float)respiratorState.cpt);
     MakeAndSendMessageWithUTLNProtocol(0x0064, 16, payload);
+    volatile unsigned char value[2];
+    I2C1ReadInterrupt( 0x6C, &value, 2 );
+    
+    respiratorState.pressure1=BUILD_UINT16(value[0], value[1]);
 }
 void SetMoteurPAPSpeed(float speed)
 {

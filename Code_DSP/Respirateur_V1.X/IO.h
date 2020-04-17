@@ -1,4 +1,3 @@
-
 #ifndef IO_H
 #define	IO_H
 
@@ -13,6 +12,13 @@
 #define ELECTROVANNE _LATB5
 #define FIN_COURSE1 PORTBbits.RB3
 #define FIN_COURSE2 PORTBbits.RB2
+
+#define I2C_SCLtris TRISBbits.TRISB8
+#define I2C_SDAtris TRISBbits.TRISB9
+#define _I2C_SCL _LATB8
+#define _I2C_SDA _LATB9
+#define I2C_SCLpin 8
+#define I2C_SDApin 9
 
 /*******************************************************************************
  * Prototypes fonctions
