@@ -10,6 +10,8 @@
 #define STEP _LATC6
 #define DIR _LATA9
 #define ELECTROVANNE _LATB5
+#define SERVO1 _LATC4
+#define SERVO2 _LATC3
 #define FIN_COURSE1 PORTBbits.RB3
 #define FIN_COURSE2 PORTBbits.RB2
 

@@ -20,6 +20,7 @@
       <itemPath>Define.h</itemPath>
       <itemPath>RespiratorState.h</itemPath>
       <itemPath>ustv_i2c_interrupt.h</itemPath>
+      <itemPath>UTLN_D6F-PH.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -42,6 +43,7 @@
       <itemPath>Utilities.c</itemPath>
       <itemPath>RespiratorState.c</itemPath>
       <itemPath>ustv_i2c_interrupt.c</itemPath>
+      <itemPath>UTLN_D6F-PH.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

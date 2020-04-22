@@ -34,7 +34,7 @@
 typedef struct robotStateBITS {
     union {
         struct {
-            double pressure1;
+            float pressure1;
             double pressure2;
             
             unsigned char useExternalPotentiometre;

@@ -12,6 +12,5 @@ void InitOC1(void)
 void OC1GeneratePulse()
 {
     OC1CONbits.OCM=0b010;           //Active high one shot
-    
 }
 

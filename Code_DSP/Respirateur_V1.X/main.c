@@ -16,6 +16,7 @@
 #include "RespiratorState.h"
 #include "Define.h"
 #include "ustv_i2c_interrupt.h"
+#include "UTLN_D6F-PH.h"
 
 #define SENS_MONTEE 1
 #define SENS_DESCENTE 0
@@ -38,7 +39,7 @@ typedef enum{
 
 
 
-ETAT etat=ARRET;
+volatile ETAT etat=ARRET;
 volatile unsigned long timeStampDebut=0;
 unsigned char flagFinMontee=0;
 unsigned char flagFinDescente=0;
@@ -54,7 +55,7 @@ int main(void)
     
     InitADC1();
     
-    RegisterTimerWithCallBack(TIMER2_ID, 10000.0, Timer2CallBack, true, 3, 1);   //Time base pulse OC
+    RegisterTimerWithCallBack(TIMER2_ID, 10000.0, Timer2CallBack, false, 3, 1);   //Time base pulse OC
     RegisterTimerWithCallBack(TIMER3_ID, 500.0, Timer3CallBack, true, 5, 1);//Gestion de la vitesse des pas a pas
     RegisterTimerWithCallBack(TIMER4_ID, 1000.0, Timer4CallBack, true, 6, 1);//TimeStamp
     RegisterTimerWithCallBack(TIMER5_ID, 50.0, Timer5CallBack, true, 4, 1);//Timer Send values
@@ -62,7 +63,10 @@ int main(void)
     initUART1();
     
     InitI2C1();
-    
+    D6FHarwareReset();
+    __delay_ms(10);
+    D6F_PHInitialize();
+    __delay_ms(100);
     LED_BLANCHE = 1;
     LED_ROUGE = 1;
     
@@ -82,6 +86,7 @@ int main(void)
     /****************************************************************************************************/
     for (;;)
     {
+        SERVO1=!SERVO1;
         //Detection fin course
         if(FIN_COURSE1==0)
         {
@@ -117,7 +122,7 @@ int main(void)
                 }
                 break;
             case ATTENTE_BAS:
-                if(g_longTimeStamp>=(timeStampDebut+respiratorState.attenteBas))
+                if(g_longTimeStamp>=(timeStampDebut+(unsigned long)respiratorState.attenteBas))
                 {
                     //timeStampDebut=g_longTimeStamp;
                     LED_ROUGE=1;
@@ -149,7 +154,7 @@ int main(void)
                 }
                 break;
             case ATTENTE_HAUT:
-                if(g_longTimeStamp>=(timeStampDebut+respiratorState.attenteHaut))
+                if(g_longTimeStamp>=(timeStampDebut+(unsigned long)respiratorState.attenteHaut))
                 {
                     //On commence la descente
                     respiratorState.sens=SENS_DESCENTE;
@@ -234,6 +239,7 @@ void Timer4CallBack(void)
 }
 void Timer5CallBack(void)
 {
+    static unsigned char subdiv=0;
     unsigned char payload[16];
     payload[0]=BREAK_UINT32(g_longTimeStamp,3);
     payload[1]=BREAK_UINT32(g_longTimeStamp,2);
@@ -243,12 +249,10 @@ void Timer5CallBack(void)
     getBytesFromFloat(payload, 8, respiratorState.pressure2);
     getBytesFromFloat(payload, 12, (float)respiratorState.cpt);
     MakeAndSendMessageWithUTLNProtocol(0x0064, 16, payload);
-    volatile unsigned char value[2];
-    I2C1ReadInterrupt( 0x6C, &value, 2 );
     
-    respiratorState.pressure1=BUILD_UINT16(value[0], value[1]);
-}
-void SetMoteurPAPSpeed(float speed)
-{
-    
+    //if(subdiv++>=2)
+    {
+        subdiv=0;
+        respiratorState.pressure1=D6FPress_meas();
+    }
 }

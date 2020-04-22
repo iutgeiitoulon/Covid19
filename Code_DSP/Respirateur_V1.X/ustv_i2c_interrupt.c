@@ -314,22 +314,27 @@ void I2C1ReadNInterrupt( unsigned char slaveAddress, unsigned char registerAddre
     }
 }
 
-void I2C1ReadInterrupt( unsigned char slaveAddress, volatile unsigned char* data, unsigned int length )
+void I2C1WriteNReadNInterrupt( unsigned char slaveAddress, volatile unsigned char* senddata, unsigned int sendLength, volatile unsigned char* readData, unsigned int readLength )
 {
     I2CData msgCommand;
     I2CData msgData;
 
-//    msgCommand.RW = I2C_WRITE;
-//    msgCommand.data[0] = slaveAddress & 0xFE;
-//    msgCommand.length = 1;
+    msgCommand.RW = I2C_WRITE;
+    msgCommand.data[0] = slaveAddress & 0xFE;
+    int i;
+    for (i=0;i<sendLength;i++)
+    {
+        msgCommand.data[1+i] = senddata[i];
+    }
+    msgCommand.length = sendLength+1;
 
     msgData.RW = I2C_READ;
     //msgData.data = data;
     msgData.data[0] = slaveAddress  | 0x01;
-    msgData.length = length;
+    msgData.length = readLength;
 
     // On place les messages dans le buffer
-    //I2C1WriteToBuffer(msgCommand);
+    I2C1WriteToBuffer(msgCommand);
     I2C1WriteToBuffer(msgData);
 
     // On lance la tranmission si aucune transmission n'est en cours
@@ -352,10 +357,9 @@ void I2C1ReadInterrupt( unsigned char slaveAddress, volatile unsigned char* data
 //        InitI2C1();
 //    }
     
-    int i=0;
-    for (i=0; i<length; i++)
+    for (i=0; i<readLength; i++)
     {
-        data[i] = currentI2CMsg.data[i];
+        readData[i] = currentI2CMsg.data[i];
     }
 }
 /*******************************************************************************

@@ -44,7 +44,7 @@ unsigned char IsI2CCrashed(void);
 void StartI2C1Message(void);
 void I2C1ReadNInterrupt( unsigned char slaveAddress, unsigned char registerAddress, volatile unsigned char* data, unsigned int length );
 void I2C1WriteNInterrupt( unsigned char slaveAddress, unsigned char registerAddress, unsigned char* data, unsigned int length );
-void I2C1ReadInterrupt( unsigned char slaveAddress, volatile unsigned char* data, unsigned int length );
+void I2C1WriteNReadNInterrupt( unsigned char slaveAddress, volatile unsigned char* senddata, unsigned int sendLength, volatile unsigned char* readData, unsigned int readLength );
 
 void I2C1WriteToBuffer(I2CData data);
 BOOL I2C1IsDataReadyInBuffer(void);
