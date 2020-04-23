@@ -46,10 +46,14 @@ namespace WpfRespirateur_Interface
             oscilloRespiration.SetTitle("Respiration");
             oscilloRespiration.AddOrUpdateLine(0, 100, "Pression 1");
             oscilloRespiration.ChangeLineColor(0, Colors.Blue);
-            oscilloRespiration.AddOrUpdateLine(1, 100, "Pression 2");
+            oscilloRespiration.AddOrUpdateLine(1, 100, "Volume");
             oscilloRespiration.ChangeLineColor(1, Colors.Red);
             oscilloRespiration.AddOrUpdateLine(2, 100, "Motor Position");
             oscilloRespiration.ChangeLineColor(2, Colors.GreenYellow);
+            oscilloRespiration.AddOrUpdateLine(3, 100, "Vitesse");
+            oscilloRespiration.ChangeLineColor(3, Colors.HotPink);
+            oscilloRespiration.AddOrUpdateLine(4, 100, "Debit");
+            oscilloRespiration.ChangeLineColor(4, Colors.Green);
             timerAffichage = new DispatcherTimer();
             timerAffichage.Interval = new TimeSpan(0,0,0,0,100);
             timerAffichage.Tick += TimerAffichage_Tick;
@@ -231,11 +235,31 @@ namespace WpfRespirateur_Interface
         }
 
         #region InputEvents
+        double volume = 0;
         public void UpdateRespirationDataOnGraph(object sender, RespirateurDataEventArgs e)
         {
             oscilloRespiration.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);
-            oscilloRespiration.AddPointToLine(1, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2);
+            
             oscilloRespiration.AddPointToLine(2, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensorAmbiant);
+            double rho = 1.23;
+            double diametre = 0.023;        //en M
+            double diffPression = e.pressureSensor1-0.08;
+            int sign=1;
+            if (diffPression < 0)
+                sign = -1;
+            else
+                sign = 1;
+            double vitesse = Math.Sqrt(2 * Math.Abs(diffPression) / rho)* sign;
+            double surface = (diametre * diametre) / 4 * Math.PI;
+            double debit = vitesse * surface;           //En M3/s
+            
+            if (vitesse > 0.1)
+                volume += (debit*1000) / 50;
+            else
+                volume = 0;
+            oscilloRespiration.AddPointToLine(3, e.EmbeddedTimeStampInMs / 1000.0, vitesse);
+            oscilloRespiration.AddPointToLine(4, e.EmbeddedTimeStampInMs / 1000.0, debit*1000);
+            oscilloRespiration.AddPointToLine(1, e.EmbeddedTimeStampInMs / 1000.0, volume);
         }
 
 
