@@ -38,7 +38,12 @@ typedef struct robotStateBITS {
             double pressure2;
             
             unsigned char useExternalPotentiometre;
+            double pLimite;             //Seuil pression limite
+            double vLimite;             //Seuil volume limite
             double attenteHaut;         //Attente haut en miliseconde
+            
+            double debitCourant;               //Debit en M3/s
+            double volumeCourant;               //Volume en M3
             double attenteBas;         //Attente bas en miliseconde
             long stepsOffsetUp;
             long stepsOffsetDown;

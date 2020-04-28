@@ -37,7 +37,7 @@ namespace ExtendedSerialPort
                 //Le Thread est infini mais il sera suspendu quand le port série sera trouvé et ouvert
                 while (true)
                 {
-                    string PortNameFound = PortName;//SearchPortName(PortType); 
+                    string PortNameFound = SearchPortName("FTDI"); //PortName;//
                     if (!string.IsNullOrWhiteSpace(PortNameFound))
                     {
                         //Si on trouve un port série de type voulu

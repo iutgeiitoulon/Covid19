@@ -88,6 +88,23 @@ namespace MessageGenerator
 
             OnMessageToRespirator((Int16)Commands.SetPauseTimeDown, 4, payload);
         }
+
+        public void GenerateMessageSetPlimit(object sender, DoubleArgs e)
+        {
+            byte[] payload = new byte[4];
+            payload = ((float)(e.Value)).GetBytes();
+
+            OnMessageToRespirator((Int16)Commands.SetPlimit, 4, payload);
+        }
+
+        public void GenerateMessageSetVlimit(object sender, DoubleArgs e)
+        {
+            byte[] payload = new byte[4];
+            payload = ((float)(e.Value)).GetBytes();
+
+            OnMessageToRespirator((Int16)Commands.SetVlimit, 4, payload);
+        }
+
         //Output events
         public event EventHandler<MessageToRespirateurArgs> OnMessageToRespirateurGeneratedEvent;
         public virtual void OnMessageToRespirator(Int16 msgFunction, Int16 msgPayloadLength, byte[] msgPayload)

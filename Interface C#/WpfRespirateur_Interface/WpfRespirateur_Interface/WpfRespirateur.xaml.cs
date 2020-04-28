@@ -54,6 +54,8 @@ namespace WpfRespirateur_Interface
             oscilloRespiration.ChangeLineColor(3, Colors.HotPink);
             oscilloRespiration.AddOrUpdateLine(4, 100, "Debit");
             oscilloRespiration.ChangeLineColor(4, Colors.Green);
+            oscilloRespiration.AddOrUpdateLine(5, 100, "Pression 2");
+            oscilloRespiration.ChangeLineColor(5, Colors.Gray);
             timerAffichage = new DispatcherTimer();
             timerAffichage.Interval = new TimeSpan(0,0,0,0,100);
             timerAffichage.Tick += TimerAffichage_Tick;
@@ -234,13 +236,24 @@ namespace WpfRespirateur_Interface
             OnSetSpeedFromInterface(Convert.ToDouble(this.TexBoxSetSpeed.Text));
         }
 
+
+        private void SetPlimit_Click(object sender, RoutedEventArgs e)
+        {
+            OnSetPlimitFromInterface(Convert.ToDouble(this.TexBoxSetPlimit.Text));
+        }
+
+        private void SetVlimit_Click(object sender, RoutedEventArgs e)
+        {
+            OnSetVlimitFromInterface(Convert.ToDouble(this.TexBoxSetVlimit.Text));
+        }
+
         #region InputEvents
         double volume = 0;
         public void UpdateRespirationDataOnGraph(object sender, RespirateurDataEventArgs e)
         {
             oscilloRespiration.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);
-            
-            oscilloRespiration.AddPointToLine(2, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensorAmbiant);
+            double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
+            oscilloRespiration.AddPointToLine(5, e.EmbeddedTimeStampInMs / 1000.0, pression2);
             double rho = 1.23;
             double diametre = 0.023;        //en M
             double diffPression = e.pressureSensor1-0.08;
@@ -250,10 +263,11 @@ namespace WpfRespirateur_Interface
             else
                 sign = 1;
             double vitesse = Math.Sqrt(2 * Math.Abs(diffPression) / rho)* sign;
-            double surface = (diametre * diametre) / 4 * Math.PI;
+            //double surface = (diametre * diametre) / 4 * Math.PI;
+            double surface = 0.03*0.03;
             double debit = vitesse * surface;           //En M3/s
             
-            if (vitesse > 0.1)
+            if (vitesse > 0.01)
                 volume += (debit*1000) / 50;
             else
                 volume = 0;
@@ -507,6 +521,26 @@ namespace WpfRespirateur_Interface
             }
         }
 
+        public event EventHandler<DoubleArgs> OnSetPlimitFromInterfaceGeneratedEvent;
+        public virtual void OnSetPlimitFromInterface(double plimit)
+        {
+            var handler = OnSetPlimitFromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = plimit });
+            }
+        }
+
+        public event EventHandler<DoubleArgs> OnSetVlimitFromInterfaceGeneratedEvent;
+        public virtual void OnSetVlimitFromInterface(double vlimit)
+        {
+            var handler = OnSetVlimitFromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = vlimit });
+            }
+        }
+
         public event EventHandler<DoubleArgs> OnSetSpeedFromInterfaceGeneratedEvent;
         public virtual void OnSetSpeedFromInterface(double speed)
         {
@@ -516,8 +550,8 @@ namespace WpfRespirateur_Interface
                 handler(this, new DoubleArgs { Value = speed });
             }
         }
-        #endregion
 
+        #endregion
 
     }
 }

@@ -279,7 +279,21 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
             respiratorState.attenteBas=(double)(getFloat(payload,0)*1000);
             getBytesFromFloat(msgTxUARTPayload, 0, respiratorState.attenteBas/1000.0);
             msgTxUARTPayloadLength=4;
-            break;            
+            break;      
+        //Set V Limit
+        case 0x0017:
+            blockMessage=0;
+            respiratorState.vLimite=(double)(getFloat(payload,0));
+            getBytesFromFloat(msgTxUARTPayload, 0, respiratorState.vLimite);
+            msgTxUARTPayloadLength=4;
+            break;      
+        //Set P Limit
+        case 0x0018:
+            blockMessage=0;
+            respiratorState.pLimite=(double)(getFloat(payload,0));
+            getBytesFromFloat(msgTxUARTPayload, 0, respiratorState.pLimite);
+            msgTxUARTPayloadLength=4;
+            break;                  
         // ToggleLed
         case 0x0008:
                 switch(payload[0])

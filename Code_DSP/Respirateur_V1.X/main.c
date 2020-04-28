@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "p33Fxxxx.h"
 #include <libpic30.h>
+#include <math.h>
 #include "pragma_config.h"
 #include "main.h"
 #include "oscillator.h"
@@ -18,8 +19,8 @@
 #include "ustv_i2c_interrupt.h"
 #include "UTLN_D6F-PH.h"
 
-#define SENS_MONTEE 1
-#define SENS_DESCENTE 0
+#define SENS_MONTEE 0
+#define SENS_DESCENTE 1
 volatile unsigned long g_longTimeStamp=0;
 
 extern BOOL startRespirator;
@@ -56,12 +57,12 @@ int main(void)
     InitADC1();
     
     RegisterTimerWithCallBack(TIMER2_ID, 10000.0, Timer2CallBack, false, 3, 1);   //Time base pulse OC
-    RegisterTimerWithCallBack(TIMER3_ID, 500.0, Timer3CallBack, true, 5, 1);//Gestion de la vitesse des pas a pas
+    RegisterTimerWithCallBack(TIMER3_ID, 500.0, Timer3CallBack, true, 5, 0);//Gestion de la vitesse des pas a pas
     RegisterTimerWithCallBack(TIMER4_ID, 1000.0, Timer4CallBack, true, 6, 1);//TimeStamp
     RegisterTimerWithCallBack(TIMER5_ID, 50.0, Timer5CallBack, true, 4, 1);//Timer Send values
     InitOC1();
     initUART1();
-    
+                                      
     InitI2C1();
     D6FHarwareReset();
     __delay_ms(10);
@@ -71,15 +72,18 @@ int main(void)
     LED_ROUGE = 1;
     
     //Parametres par defaut
-    respiratorState.amplitude=475;
-    respiratorState.attenteBas=1500;
-    respiratorState.attenteHaut=1500;
+    respiratorState.amplitude=600;
+    respiratorState.attenteBas=1000;
+    respiratorState.attenteHaut=1000;
     respiratorState.stepsOffsetDown=0;
     respiratorState.stepsOffsetUp=0;
     respiratorState.cpt=0;
     respiratorState.useExternalPotentiometre=0;
     respiratorState.vitesse=1300;
+    respiratorState.pLimite=20000;      //en Pascals
+    respiratorState.vLimite=0.0005;     //en M3
     
+    double pressionCalculeeEmbarque=0;
     //STEP=1;
     /****************************************************************************************************/
     // Boucle Principale
@@ -91,7 +95,14 @@ int main(void)
         if(FIN_COURSE1==0)
         {
              respiratorState.cpt=0;  //On reset le compteur(et donc la position 0 du moteur)
+             LED_BLANCHE=1;
+//             if(etat==DESCENTE)
+//             {
+//             TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+//             flagFinDescente=1;
+//             }
         }
+        
         if(ADCIsConversionFinished())
         {
             ADCClearConversionFinishedFlag();
@@ -102,8 +113,20 @@ int main(void)
             ADCVals[2]=pValues[2];
             ADCVals[3]=pValues[3];
             ADCVals[4]=pValues[4];
-            respiratorState.pressure1=(ADCVals[0]*(3.3/4096));
-            respiratorState.pressure2=(ADCVals[1]*(3.3/4096));
+            //respiratorState.pressure1=(ADCVals[0]*(3.3/4096));
+            respiratorState.pressure2=(ADCVals[0]*(3.3/4096));
+            
+            double rho = 1.23;
+            double diametre = 0.023;        //en M
+            double diffPression = respiratorState.pressure2-0.08;
+            int sign=1;
+            if (diffPression < 0)
+                sign = -1;
+            else
+                sign = 1;
+            double vitesse=sqrt(2*ABS(diffPression)/rho)*sign;
+            respiratorState.debitCourant=vitesse*0.0009;
+            
             if(respiratorState.useExternalPotentiometre)
             {
                 respiratorState.amplitude=(unsigned short)(ADCVals[2]*(500.0/4096.0));
@@ -142,10 +165,17 @@ int main(void)
             case MONTEE:
                 if(flagFinMontee)
                 {
+                    LED_BLANCHE=0;
                     LED_ROUGE=0;
                     flagFinMontee=0;
                     timeStampDebut=g_longTimeStamp;
                     etat=ATTENTE_HAUT;
+                }
+                if(respiratorState.pressure1>=respiratorState.pLimite || respiratorState.volumeCourant>=respiratorState.vLimite)
+                {
+                    timeStampDebut=g_longTimeStamp;
+                    etat=ATTENTE_HAUT;
+                    TurnOnOffTimer(TIMER3_ID,0);
                 }
                 if(!startRespirator)
                 {
@@ -198,7 +228,7 @@ void Timer2CallBack(void)
 
 void Timer3CallBack(void)
 {
-    LED_BLANCHE=!LED_BLANCHE;
+    
     if(respiratorState.sens==SENS_MONTEE)
     {
         //Si on es dans le sens positif
@@ -219,8 +249,12 @@ void Timer3CallBack(void)
         //Si on es dans le sens negatif
         OC1GeneratePulse(); //On genere un pulse
         respiratorState.cpt--;              //On decremente le compteur
-        
-        if(respiratorState.cpt<=0)
+        if(FIN_COURSE1==0)
+        {
+            flagFinDescente=1;
+            TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+        }
+        if(respiratorState.cpt<=-30)
         {
             flagFinDescente=1;
             TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
@@ -239,6 +273,7 @@ void Timer4CallBack(void)
 }
 void Timer5CallBack(void)
 {
+    respiratorState.volumeCourant+=respiratorState.debitCourant/50.0;
     static unsigned char subdiv=0;
     unsigned char payload[16];
     payload[0]=BREAK_UINT32(g_longTimeStamp,3);
@@ -249,7 +284,7 @@ void Timer5CallBack(void)
     getBytesFromFloat(payload, 8, respiratorState.pressure2);
     getBytesFromFloat(payload, 12, (float)respiratorState.cpt);
     MakeAndSendMessageWithUTLNProtocol(0x0064, 16, payload);
-    
+    ADC1StartConversionSequence();
     //if(subdiv++>=2)
     {
         subdiv=0;

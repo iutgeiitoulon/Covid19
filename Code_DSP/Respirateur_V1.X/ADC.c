@@ -2,7 +2,7 @@
 #include "adc.h"
 
 unsigned char ADCResultIndex = 0;
-static unsigned int ADCResult[5];
+static volatile unsigned int ADCResult[5];
 unsigned char ADCConversionFinishedFlag;
 
 //Configuration ADC
@@ -17,13 +17,13 @@ void InitADC1(void) {
 
     //AD1CON2
     AD1CON2bits.VCFG = 0b000;
-    AD1CON2bits.CSCNA = 1;
+    AD1CON2bits.CSCNA = 1;      //Scan inputs
     AD1CON2bits.SMPI = 4;
 
     //AD1CON3
     AD1CON3bits.ADRC = 0;
     AD1CON3bits.SAMC = 0b11111;
-    AD1CON3bits.ADCS = 1;
+    AD1CON3bits.ADCS = 0b0000000;
 
     //Configuration des ports
     AD1PCFGLbits.PCFG0 = 0;

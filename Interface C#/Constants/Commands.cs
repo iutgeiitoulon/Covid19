@@ -22,9 +22,11 @@ namespace Constants
         ChangeSpeed=20,
         SetPauseTimeUp=21,
         SetPauseTimeDown=22,
+        SetVlimit = 23,
+        SetPlimit = 24,
 
 
-        PressureDataFromRespirator=100,
+        PressureDataFromRespirator =100,
        
 
         EmergencySTOP=-1,
