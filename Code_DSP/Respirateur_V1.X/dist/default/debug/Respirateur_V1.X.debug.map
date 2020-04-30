@@ -4,11 +4,11 @@ Tool Name:
   c:\program files (x86)\microchip\xc16\v1.35\bin\bin\..\bin/elf-ld.exe
 
 Command:
-  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00003f00.00 \
-  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00003f00.01 \
-  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00003f00.02 \
-  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00003f00.03 \
-  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00003f00.04 \
+  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00000fcc.00 \
+  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00000fcc.01 \
+  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00000fcc.02 \
+  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00000fcc.03 \
+  -TC:\\Users\\Barchasz\\AppData\\Local\\Temp\\tmp00000fcc.04 \
   -p33FJ128MC804 \
   -o \
   dist/default/debug/Respirateur_V1.X.debug.elf \
@@ -77,11 +77,11 @@ c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libpic30-elf.a(del
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(addsf3.eo)
                               build/default/debug/main.o (___subsf3)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divsf3.eo)
-                              build/default/debug/Toolbox.o (___divsf3)
+                              build/default/debug/main.o (___divsf3)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(feqltle.eo)
-                              build/default/debug/Toolbox.o (___ltsf2)
+                              build/default/debug/main.o (___ltsf2)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fgtge.eo)
-                              build/default/debug/PWM.o (___gtsf2)
+                              build/default/debug/main.o (___gtsf2)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fixsfsi.eo)
                               build/default/debug/UTLN_Timers.o (_(float, int, long long, short, float, short, int))
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fixunssfsi.eo)
@@ -100,10 +100,14 @@ c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(futil.e
                               c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(addsf3.eo) (__fPropagateNaN)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(mulsf3.eo)
                               build/default/debug/main.o (___mulsf3)
+c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(sqrtf.eo)
+                              build/default/debug/main.o (_sqrtf)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
                               build/default/debug/UTLN_D6F-PH.o (___udivdi3)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(muldi3.eo)
                               build/default/debug/UTLN_D6F-PH.o (___muldi3)
+c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(errno.eo)
+                              c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(sqrtf.eo) (_errno)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fcompare.eo)
                               c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(feqltle.eo) (__fcompare)
 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatdisf.eo)
@@ -137,14 +141,14 @@ xc16-ld 1.35 (A)
 
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
-.text                        0x200               0x944           0xde6  (3558)
-.const                       0xb44                0x12            0x1b  (27)
-.text                        0xb56              0x1c12          0x2a1b  (10779)
-.dinit                      0x2768                0x50            0x78  (120)
-.text                       0x27b8                0x24            0x36  (54)
-.init.delay32               0x27dc                0x1c            0x2a  (42)
+.text                        0x200               0x9ae           0xe85  (3717)
+.const                       0xbae                0x12            0x1b  (27)
+.text                        0xbc0              0x1d14          0x2b9e  (11166)
+.dinit                      0x28d4                0x56            0x81  (129)
+.text                       0x292a                0x76            0xb1  (177)
+.init.delay32               0x29a0                0x1c            0x2a  (42)
 
-                 Total "program" memory used (bytes):         0x38f4  (14580) 11%
+                 Total "program" memory used (bytes):         0x3b9a  (15258) 11%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x4000]
@@ -156,10 +160,10 @@ reserve_data_0x820           0x820                 0x2             0x2  (2)
 reserve_data_0x822           0x822                 0x2             0x2  (2)
 reserve_data_0x824           0x824                 0x2             0x2  (2)
 reserve_data_0x826           0x826                0x2a            0x2a  (42)
-.nbss                        0x850                   0            0x50  (80)
-.bss                         0x8a0                   0           0xccc  (3276)
+.nbss                        0x850                   0            0x52  (82)
+.bss                         0x8a2                   0           0xcdc  (3292)
 
-                 Total "data" memory used (bytes):          0xd6c  (3436) 20%
+                 Total "data" memory used (bytes):          0xd7e  (3454) 21%
 
 
 Dynamic Memory Usage
@@ -167,9 +171,9 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                       0x156c                              0x3294  (12948)
+stack                       0x157e                              0x3282  (12930)
 
-                 Maximum dynamic memory (bytes):         0x3294  (12948)
+                 Maximum dynamic memory (bytes):         0x3282  (12930)
 
 
 External Symbols in Data Memory (by address):
@@ -211,13 +215,13 @@ External Symbols in Data Memory (by address):
                     0x089d                  _setting_done_flag
                     0x089e                  _ADCResultIndex
                     0x089f                  _ADCConversionFinishedFlag
-                    0x08a0                  _currentI2CMsg
-                    0x09a1                  _I2C1Value
-                    0x11aa                  _UART1RxBuffer
-                    0x12aa                  _UART1TxBuffer
-                    0x13aa                  _rx1ReceivedPayload
-                    0x152a                  _respiratorState
-                    0x1558                  _callBack
+                    0x08a2                  _currentI2CMsg
+                    0x09a3                  _I2C1Value
+                    0x11ac                  _UART1RxBuffer
+                    0x12ac                  _UART1TxBuffer
+                    0x13ac                  _rx1ReceivedPayload
+                    0x152c                  _respiratorState
+                    0x156a                  _callBack
 
 External Symbols in Data Memory (by name):
 
@@ -229,20 +233,20 @@ External Symbols in Data Memory (by name):
                     0x0890                  _I2C1ReceptionState
                     0x088e                  _I2C1State
                     0x088f                  _I2C1TrnCounter
-                    0x09a1                  _I2C1Value
+                    0x09a3                  _I2C1Value
                     0x0898                  _RD_FIFO
                     0x089c                  _RD_REG
                     0x087a                  _UART1CircularRxBufferHead
                     0x087c                  _UART1CircularRxBufferTail
                     0x087e                  _UART1CircularTxBufferHead
                     0x0880                  _UART1CircularTxBufferTail
-                    0x11aa                  _UART1RxBuffer
-                    0x12aa                  _UART1TxBuffer
+                    0x11ac                  _UART1RxBuffer
+                    0x12ac                  _UART1TxBuffer
                     0x0878                  _UART3TxTransmissionEnCours
                     0x0894                  _antiBlockCounterI2C1
                     0x0876                  _antiBlockCounterUartTx
-                    0x1558                  _callBack
-                    0x08a0                  _currentI2CMsg
+                    0x156a                  _callBack
+                    0x08a2                  _currentI2CMsg
                     0x086c                  _etat
                     0x0873                  _flagFinDescente
                     0x0872                  _flagFinMontee
@@ -252,9 +256,9 @@ External Symbols in Data Memory (by name):
                     0x0860                  _moteurCCSpeedConsigne
                     0x085c                  _moteurPAPCurrentSpeed
                     0x0864                  _moteurPAPSpeedConsigne
-                    0x152a                  _respiratorState
+                    0x152c                  _respiratorState
                     0x0886                  _rx1ReceivedFunction
-                    0x13aa                  _rx1ReceivedPayload
+                    0x13ac                  _rx1ReceivedPayload
                     0x088a                  _rx1ReceivedPayloadIndex
                     0x0888                  _rx1ReceivedPayloadLength
                     0x0884                  _rx1ReceptionState
@@ -289,8 +293,8 @@ External Symbols in Program Memory (by address):
                   0x000652                  ___ltsf2
                   0x000652                  ___lesf2
                   0x000652                  ___eqsf2
-                  0x000656                  ___gesf2
                   0x000656                  ___gtsf2
+                  0x000656                  ___gesf2
                   0x00065a                  ___fixsfsi
                   0x00069c                  ___fixunssfsi
                   0x0006d2                  ___floatsisf
@@ -302,197 +306,198 @@ External Symbols in Program Memory (by address):
                   0x000774                  __fbopExit
                   0x00077c                  __fbopReturnNaN
                   0x000782                  ___mulsf3
-                  0x000836                  ___udivmoddi3
-                  0x00091c                  ___udivdi3
-                  0x00092a                  ___umoddi3
-                  0x000932                  ___divdi3
-                  0x000992                  ___moddi3
-                  0x0009ee                  ___muldi3
-                  0x000a40                  __fcompare
-                  0x000a76                  ___floatdisf
-                  0x000a96                  ___floatundisf
-                  0x000af4                  ___umuldi3
-                  0x000b38                  _strlen
-                  0x000b56                  _SetTimerFreq
-                  0x000fda                  _SetTimerInterruptPriority
-                  0x0010d2                  _RegisterTimerCallBack
-                  0x0010fa                  _SetTimerPeriodMs
-                  0x001120                  _SetTimerPeriodUs
-                  0x001146                  _TurnOnOffTimer
-                  0x0011c8                  _InitTimerWithCallBack
-                  0x0011f2                  _RegisterTimerWithCallBack
-                  0x001228                  _UartCalculateChecksum
-                  0x001278                  _Uart1DecodeMessage
-                  0x001342                  _SendMessageTxUART
-                  0x001350                  _ProcessMessage
-                  0x001658                  _MakeAndSendMessageWithUTLNProtocol
-                  0x0016f6                  _SendMessageToUart1
-                  0x001722                  _SendWelcomeMessage
-                  0x001730                  _SendErrorText
-                  0x00174a                  _InitI2C1
-                  0x0017ba                  _I2C1Read1
-                  0x0017d0                  _I2C1Write1
-                  0x0017ea                  _I2C1WriteNInterrupt
-                  0x00186a                  _I2C1ReadNInterrupt
-                  0x001922                  _I2C1WriteNReadNInterrupt
-                  0x0019ee                  _IncrementI2C1AntiBlockCounter
-                  0x0019fa                  _ResetI2C1AntiBlockCounter
-                  0x001a02                  _SetI2C1Crash
-                  0x001a0c                  _ResetI2CCrash
-                  0x001a14                  _IsI2CCrashed
-                  0x001a1c                  _StartI2C1Message
-                  0x001a4a                  _I2C1TransmissionOperation
-                  0x001b16                  _I2C1IsTransmissionActive
-                  0x001b28                  _I2C1WriteToBuffer
-                  0x001b56                  _I2C1IsDataReadyInBuffer
-                  0x001b6c                  _I2C1ReadFromBuffer
-                  0x001ba4                  _main
-                  0x001de2                  _Timer2CallBack
-                  0x001de8                  _Timer3CallBack
-                  0x001e78                  _Timer4CallBack
-                  0x001e8a                  _Timer5CallBack
-                  0x001ef2                  _ModuloAngleDegre
-                  0x001f40                  _Abs
-                  0x001f66                  _Max
-                  0x001f92                  _Min
-                  0x001fbe                  _Modulo2PIAngleRadian
-                  0x00200c                  _ModuloPIAngleRadian
-                  0x00205a                  _Limiteur
-                  0x0020a6                  _RadianToDegree
-                  0x0020bc                  _DegreeToRadian
-                  0x0020d2                  _initUART1
-                  0x002130                  _UART1ResetRxBuffer
-                  0x00213a                  _UART1ResetTxBuffer
-                  0x002144                  _UART1ReadToRxBuffer
-                  0x002166                  _UART1IsDataReadyInRxBuffer
-                  0x00217a                  _UART1ReadFromRxBuffer
-                  0x00219a                  _UART1WriteToTxBuffer
-                  0x0021c4                  _UART1IsDataReadyInTxBuffer
-                  0x0021d8                  _UART1WriteFromTxBuffer
-                  0x002202                  _UART1GetNbOfValuesInTxBuffer
-                  0x002220                  _UART1GetRemainingSpaceInTxBuffer
-                  0x00222c                  _UART1IncrementTxAntiBlockCounter
-                  0x002232                  _UART1ResetTxAntiBlockCounter
-                  0x00223a                  _UART1MonitorAndFixTxTransmission
-                  0x002260                  _initUART2
-                  0x0022a6                  _InitPWM
-                  0x0022de                  _InitPWM2
-                  0x002308                  _PWM2SetSpeedConsigne
-                  0x00232a                  _PWM2UpdatePeriod
-                  0x00236e                  _PWMSetSpeedConsigne
-                  0x0023a0                  _PWMUpdateSpeed
-                  0x0023e2                  _adc_wait
-                  0x002402                  _D6F_PHInitialize
-                  0x00241c                  _D6FStartMeasurement
-                  0x002434                  _D6FPress_meas
-                  0x0024a0                  _D6FTemp_meas
-                  0x002502                  _D6FHarwareReset
-                  0x002510                  _getFloat
-                  0x00252c                  _getDouble
-                  0x002540                  _getBytesFromFloat
-                  0x002572                  _getBytesFromInt32
-                  0x0025a6                  _getBytesFromDouble
-                  0x0025d8                  _LimitToInterval
-                  0x002622                  _InitIO
-                  0x00266e                  _LockIO
-                  0x002680                  _UnlockIO
-                  0x002692                  _InitCN
-                  0x0026a0                  _InitADC1
-                  0x0026f6                  _ADC1StartConversionSequence
-                  0x0026fe                  _ADCGetResult
-                  0x002706                  _ADCIsConversionFinished
-                  0x00270e                  _ADCClearConversionFinishedFlag
-                  0x002716                  _InitOscillator
-                  0x0027b8                  _InitOC1
-                  0x0027cc                  _OC1GeneratePulse
-                  0x0027dc                  ___delay32
+                  0x0007ea                  _sqrtf
+                  0x0008a0                  ___udivmoddi3
+                  0x000986                  ___udivdi3
+                  0x000994                  ___umoddi3
+                  0x00099c                  ___divdi3
+                  0x0009fc                  ___moddi3
+                  0x000a58                  ___muldi3
+                  0x000aaa                  __fcompare
+                  0x000ae0                  ___floatdisf
+                  0x000b00                  ___floatundisf
+                  0x000b5e                  ___umuldi3
+                  0x000ba2                  _strlen
+                  0x000bc0                  _SetTimerFreq
+                  0x001044                  _SetTimerInterruptPriority
+                  0x00113c                  _RegisterTimerCallBack
+                  0x001164                  _SetTimerPeriodMs
+                  0x00118a                  _SetTimerPeriodUs
+                  0x0011b0                  _TurnOnOffTimer
+                  0x001232                  _InitTimerWithCallBack
+                  0x00125c                  _RegisterTimerWithCallBack
+                  0x001292                  _UartCalculateChecksum
+                  0x0012e2                  _Uart1DecodeMessage
+                  0x0013ac                  _SendMessageTxUART
+                  0x0013ba                  _ProcessMessage
+                  0x00170a                  _MakeAndSendMessageWithUTLNProtocol
+                  0x0017a8                  _SendMessageToUart1
+                  0x0017d4                  _SendWelcomeMessage
+                  0x0017e2                  _SendErrorText
+                  0x0017fc                  _main
+                  0x001b2a                  _Timer2CallBack
+                  0x001b30                  _Timer3CallBack
+                  0x001bc0                  _Timer4CallBack
+                  0x001bd2                  _Timer5CallBack
+                  0x001c56                  _InitI2C1
+                  0x001cc6                  _I2C1Read1
+                  0x001cdc                  _I2C1Write1
+                  0x001cf6                  _I2C1WriteNInterrupt
+                  0x001d76                  _I2C1ReadNInterrupt
+                  0x001e2e                  _I2C1WriteNReadNInterrupt
+                  0x001efa                  _IncrementI2C1AntiBlockCounter
+                  0x001f06                  _ResetI2C1AntiBlockCounter
+                  0x001f0e                  _SetI2C1Crash
+                  0x001f18                  _ResetI2CCrash
+                  0x001f20                  _IsI2CCrashed
+                  0x001f28                  _StartI2C1Message
+                  0x001f56                  _I2C1TransmissionOperation
+                  0x002022                  _I2C1IsTransmissionActive
+                  0x002034                  _I2C1WriteToBuffer
+                  0x002062                  _I2C1IsDataReadyInBuffer
+                  0x002078                  _I2C1ReadFromBuffer
+                  0x0020b0                  _ModuloAngleDegre
+                  0x0020fe                  _Abs
+                  0x002124                  _Max
+                  0x002150                  _Min
+                  0x00217c                  _Modulo2PIAngleRadian
+                  0x0021ca                  _ModuloPIAngleRadian
+                  0x002218                  _Limiteur
+                  0x002264                  _RadianToDegree
+                  0x00227a                  _DegreeToRadian
+                  0x002290                  _initUART1
+                  0x0022ee                  _UART1ResetRxBuffer
+                  0x0022f8                  _UART1ResetTxBuffer
+                  0x002302                  _UART1ReadToRxBuffer
+                  0x002324                  _UART1IsDataReadyInRxBuffer
+                  0x002338                  _UART1ReadFromRxBuffer
+                  0x002358                  _UART1WriteToTxBuffer
+                  0x002382                  _UART1IsDataReadyInTxBuffer
+                  0x002396                  _UART1WriteFromTxBuffer
+                  0x0023c0                  _UART1GetNbOfValuesInTxBuffer
+                  0x0023de                  _UART1GetRemainingSpaceInTxBuffer
+                  0x0023ea                  _UART1IncrementTxAntiBlockCounter
+                  0x0023f0                  _UART1ResetTxAntiBlockCounter
+                  0x0023f8                  _UART1MonitorAndFixTxTransmission
+                  0x00241e                  _initUART2
+                  0x002464                  _InitPWM
+                  0x00249c                  _InitPWM2
+                  0x0024c6                  _PWM2SetSpeedConsigne
+                  0x0024e8                  _PWM2UpdatePeriod
+                  0x00252c                  _PWMSetSpeedConsigne
+                  0x00255e                  _PWMUpdateSpeed
+                  0x0025a0                  _adc_wait
+                  0x0025c0                  _D6F_PHInitialize
+                  0x0025da                  _D6FStartMeasurement
+                  0x0025f2                  _D6FPress_meas
+                  0x00265e                  _D6FTemp_meas
+                  0x0026c0                  _D6FHarwareReset
+                  0x0026ce                  _getFloat
+                  0x0026ea                  _getDouble
+                  0x0026fe                  _getBytesFromFloat
+                  0x002730                  _getBytesFromInt32
+                  0x002764                  _getBytesFromDouble
+                  0x002796                  _LimitToInterval
+                  0x0027e0                  _InitIO
+                  0x00282c                  _LockIO
+                  0x00283e                  _UnlockIO
+                  0x002850                  _InitCN
+                  0x00285e                  _InitADC1
+                  0x0028b4                  _ADC1StartConversionSequence
+                  0x0028bc                  _ADCGetResult
+                  0x0028c4                  _ADCIsConversionFinished
+                  0x0028cc                  _ADCClearConversionFinishedFlag
+                  0x00292a                  _InitOscillator
+                  0x00297c                  _InitOC1
+                  0x002990                  _OC1GeneratePulse
+                  0x0029a0                  ___delay32
                   0xf80004                  __FGS.sec
 
 External Symbols in Program Memory (by name):
 
-                  0x0026f6                  _ADC1StartConversionSequence
-                  0x00270e                  _ADCClearConversionFinishedFlag
-                  0x0026fe                  _ADCGetResult
-                  0x002706                  _ADCIsConversionFinished
-                  0x001f40                  _Abs
-                  0x002502                  _D6FHarwareReset
-                  0x002434                  _D6FPress_meas
-                  0x00241c                  _D6FStartMeasurement
-                  0x0024a0                  _D6FTemp_meas
-                  0x002402                  _D6F_PHInitialize
-                  0x0020bc                  _DegreeToRadian
-                  0x001b56                  _I2C1IsDataReadyInBuffer
-                  0x001b16                  _I2C1IsTransmissionActive
-                  0x0017ba                  _I2C1Read1
-                  0x001b6c                  _I2C1ReadFromBuffer
-                  0x00186a                  _I2C1ReadNInterrupt
-                  0x001a4a                  _I2C1TransmissionOperation
-                  0x0017d0                  _I2C1Write1
-                  0x0017ea                  _I2C1WriteNInterrupt
-                  0x001922                  _I2C1WriteNReadNInterrupt
-                  0x001b28                  _I2C1WriteToBuffer
-                  0x0019ee                  _IncrementI2C1AntiBlockCounter
-                  0x0026a0                  _InitADC1
-                  0x002692                  _InitCN
-                  0x00174a                  _InitI2C1
-                  0x002622                  _InitIO
-                  0x0027b8                  _InitOC1
-                  0x002716                  _InitOscillator
-                  0x0022a6                  _InitPWM
-                  0x0022de                  _InitPWM2
-                  0x0011c8                  _InitTimerWithCallBack
-                  0x001a14                  _IsI2CCrashed
-                  0x0025d8                  _LimitToInterval
-                  0x00205a                  _Limiteur
-                  0x00266e                  _LockIO
-                  0x001658                  _MakeAndSendMessageWithUTLNProtocol
-                  0x001f66                  _Max
-                  0x001f92                  _Min
-                  0x001fbe                  _Modulo2PIAngleRadian
-                  0x001ef2                  _ModuloAngleDegre
-                  0x00200c                  _ModuloPIAngleRadian
-                  0x0027cc                  _OC1GeneratePulse
-                  0x002308                  _PWM2SetSpeedConsigne
-                  0x00232a                  _PWM2UpdatePeriod
-                  0x00236e                  _PWMSetSpeedConsigne
-                  0x0023a0                  _PWMUpdateSpeed
-                  0x001350                  _ProcessMessage
-                  0x0020a6                  _RadianToDegree
-                  0x0010d2                  _RegisterTimerCallBack
-                  0x0011f2                  _RegisterTimerWithCallBack
-                  0x0019fa                  _ResetI2C1AntiBlockCounter
-                  0x001a0c                  _ResetI2CCrash
-                  0x001730                  _SendErrorText
-                  0x0016f6                  _SendMessageToUart1
-                  0x001342                  _SendMessageTxUART
-                  0x001722                  _SendWelcomeMessage
-                  0x001a02                  _SetI2C1Crash
-                  0x000b56                  _SetTimerFreq
-                  0x000fda                  _SetTimerInterruptPriority
-                  0x0010fa                  _SetTimerPeriodMs
-                  0x001120                  _SetTimerPeriodUs
-                  0x001a1c                  _StartI2C1Message
-                  0x001de2                  _Timer2CallBack
-                  0x001de8                  _Timer3CallBack
-                  0x001e78                  _Timer4CallBack
-                  0x001e8a                  _Timer5CallBack
-                  0x001146                  _TurnOnOffTimer
-                  0x002202                  _UART1GetNbOfValuesInTxBuffer
-                  0x002220                  _UART1GetRemainingSpaceInTxBuffer
-                  0x00222c                  _UART1IncrementTxAntiBlockCounter
-                  0x002166                  _UART1IsDataReadyInRxBuffer
-                  0x0021c4                  _UART1IsDataReadyInTxBuffer
-                  0x00223a                  _UART1MonitorAndFixTxTransmission
-                  0x00217a                  _UART1ReadFromRxBuffer
-                  0x002144                  _UART1ReadToRxBuffer
-                  0x002130                  _UART1ResetRxBuffer
-                  0x002232                  _UART1ResetTxAntiBlockCounter
-                  0x00213a                  _UART1ResetTxBuffer
-                  0x0021d8                  _UART1WriteFromTxBuffer
-                  0x00219a                  _UART1WriteToTxBuffer
-                  0x001278                  _Uart1DecodeMessage
-                  0x001228                  _UartCalculateChecksum
-                  0x002680                  _UnlockIO
+                  0x0028b4                  _ADC1StartConversionSequence
+                  0x0028cc                  _ADCClearConversionFinishedFlag
+                  0x0028bc                  _ADCGetResult
+                  0x0028c4                  _ADCIsConversionFinished
+                  0x0020fe                  _Abs
+                  0x0026c0                  _D6FHarwareReset
+                  0x0025f2                  _D6FPress_meas
+                  0x0025da                  _D6FStartMeasurement
+                  0x00265e                  _D6FTemp_meas
+                  0x0025c0                  _D6F_PHInitialize
+                  0x00227a                  _DegreeToRadian
+                  0x002062                  _I2C1IsDataReadyInBuffer
+                  0x002022                  _I2C1IsTransmissionActive
+                  0x001cc6                  _I2C1Read1
+                  0x002078                  _I2C1ReadFromBuffer
+                  0x001d76                  _I2C1ReadNInterrupt
+                  0x001f56                  _I2C1TransmissionOperation
+                  0x001cdc                  _I2C1Write1
+                  0x001cf6                  _I2C1WriteNInterrupt
+                  0x001e2e                  _I2C1WriteNReadNInterrupt
+                  0x002034                  _I2C1WriteToBuffer
+                  0x001efa                  _IncrementI2C1AntiBlockCounter
+                  0x00285e                  _InitADC1
+                  0x002850                  _InitCN
+                  0x001c56                  _InitI2C1
+                  0x0027e0                  _InitIO
+                  0x00297c                  _InitOC1
+                  0x00292a                  _InitOscillator
+                  0x002464                  _InitPWM
+                  0x00249c                  _InitPWM2
+                  0x001232                  _InitTimerWithCallBack
+                  0x001f20                  _IsI2CCrashed
+                  0x002796                  _LimitToInterval
+                  0x002218                  _Limiteur
+                  0x00282c                  _LockIO
+                  0x00170a                  _MakeAndSendMessageWithUTLNProtocol
+                  0x002124                  _Max
+                  0x002150                  _Min
+                  0x00217c                  _Modulo2PIAngleRadian
+                  0x0020b0                  _ModuloAngleDegre
+                  0x0021ca                  _ModuloPIAngleRadian
+                  0x002990                  _OC1GeneratePulse
+                  0x0024c6                  _PWM2SetSpeedConsigne
+                  0x0024e8                  _PWM2UpdatePeriod
+                  0x00252c                  _PWMSetSpeedConsigne
+                  0x00255e                  _PWMUpdateSpeed
+                  0x0013ba                  _ProcessMessage
+                  0x002264                  _RadianToDegree
+                  0x00113c                  _RegisterTimerCallBack
+                  0x00125c                  _RegisterTimerWithCallBack
+                  0x001f06                  _ResetI2C1AntiBlockCounter
+                  0x001f18                  _ResetI2CCrash
+                  0x0017e2                  _SendErrorText
+                  0x0017a8                  _SendMessageToUart1
+                  0x0013ac                  _SendMessageTxUART
+                  0x0017d4                  _SendWelcomeMessage
+                  0x001f0e                  _SetI2C1Crash
+                  0x000bc0                  _SetTimerFreq
+                  0x001044                  _SetTimerInterruptPriority
+                  0x001164                  _SetTimerPeriodMs
+                  0x00118a                  _SetTimerPeriodUs
+                  0x001f28                  _StartI2C1Message
+                  0x001b2a                  _Timer2CallBack
+                  0x001b30                  _Timer3CallBack
+                  0x001bc0                  _Timer4CallBack
+                  0x001bd2                  _Timer5CallBack
+                  0x0011b0                  _TurnOnOffTimer
+                  0x0023c0                  _UART1GetNbOfValuesInTxBuffer
+                  0x0023de                  _UART1GetRemainingSpaceInTxBuffer
+                  0x0023ea                  _UART1IncrementTxAntiBlockCounter
+                  0x002324                  _UART1IsDataReadyInRxBuffer
+                  0x002382                  _UART1IsDataReadyInTxBuffer
+                  0x0023f8                  _UART1MonitorAndFixTxTransmission
+                  0x002338                  _UART1ReadFromRxBuffer
+                  0x002302                  _UART1ReadToRxBuffer
+                  0x0022ee                  _UART1ResetRxBuffer
+                  0x0023f0                  _UART1ResetTxAntiBlockCounter
+                  0x0022f8                  _UART1ResetTxBuffer
+                  0x002396                  _UART1WriteFromTxBuffer
+                  0x002358                  _UART1WriteToTxBuffer
+                  0x0012e2                  _Uart1DecodeMessage
+                  0x001292                  _UartCalculateChecksum
+                  0x00283e                  _UnlockIO
                   0x000396                  __ADC1Interrupt
                   0x00050c                  __DefaultInterrupt
                   0xf80004                  __FGS.sec
@@ -506,49 +511,50 @@ External Symbols in Program Memory (by name):
                   0x0003c8                  __U1RXInterrupt
                   0x000420                  __U1TXInterrupt
                   0x000514                  ___addsf3
-                  0x0027dc                  ___delay32
-                  0x000932                  ___divdi3
+                  0x0029a0                  ___delay32
+                  0x00099c                  ___divdi3
                   0x0005ce                  ___divsf3
                   0x000652                  ___eqsf2
                   0x00065a                  ___fixsfsi
                   0x00069c                  ___fixunssfsi
-                  0x000a76                  ___floatdisf
+                  0x000ae0                  ___floatdisf
                   0x0006d2                  ___floatsisf
-                  0x000a96                  ___floatundisf
+                  0x000b00                  ___floatundisf
                   0x0006d8                  ___floatunsisf
                   0x000656                  ___gesf2
                   0x000656                  ___gtsf2
                   0x000652                  ___lesf2
                   0x000652                  ___ltsf2
-                  0x000992                  ___moddi3
-                  0x0009ee                  ___muldi3
+                  0x0009fc                  ___moddi3
+                  0x000a58                  ___muldi3
                   0x000782                  ___mulsf3
                   0x000512                  ___subsf3
-                  0x00091c                  ___udivdi3
-                  0x000836                  ___udivmoddi3
-                  0x00092a                  ___umoddi3
-                  0x000af4                  ___umuldi3
+                  0x000986                  ___udivdi3
+                  0x0008a0                  ___udivmoddi3
+                  0x000994                  ___umoddi3
+                  0x000b5e                  ___umuldi3
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x000762                  __fPropagateNaN
                   0x000774                  __fbopExit
                   0x00077c                  __fbopReturnNaN
-                  0x000a40                  __fcompare
+                  0x000aaa                  __fcompare
                   0x0006dc                  __fpack
                   0x000728                  __funpack
                   0x000752                  __funpack2
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x0023e2                  _adc_wait
-                  0x0025a6                  _getBytesFromDouble
-                  0x002540                  _getBytesFromFloat
-                  0x002572                  _getBytesFromInt32
-                  0x00252c                  _getDouble
-                  0x002510                  _getFloat
-                  0x0020d2                  _initUART1
-                  0x002260                  _initUART2
-                  0x001ba4                  _main
-                  0x000b38                  _strlen
+                  0x0025a0                  _adc_wait
+                  0x002764                  _getBytesFromDouble
+                  0x0026fe                  _getBytesFromFloat
+                  0x002730                  _getBytesFromInt32
+                  0x0026ea                  _getDouble
+                  0x0026ce                  _getFloat
+                  0x002290                  _initUART1
+                  0x00241e                  _initUART2
+                  0x0017fc                  _main
+                  0x0007ea                  _sqrtf
+                  0x000ba2                  _strlen
 
 Memory Configuration
 
@@ -649,7 +655,7 @@ LOAD c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libfx-elf.a
                   0x000002          0x2 SHORT 0x0 ((ABSOLUTE (__reset) >> 0x10) & 0x7f)
                   0x000003          0x2 SHORT 0x0
 
-.text             0x000200        0x944
+.text             0x000200        0x9ae
  *(.init)
  .init            0x000200         0x4c c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libpic30-elf.a(crt0_standard.o)
                   0x000200                  __resetPRI
@@ -727,41 +733,43 @@ LOAD c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libfx-elf.a
                   0x00077c                  __fbopReturnNaN
  .libm.mulsf3     0x000782         0x68 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(mulsf3.eo)
                   0x000782                  ___mulsf3
+ .libm.sqrtf      0x0007ea         0x6a c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(sqrtf.eo)
+                  0x0007ea                  _sqrtf
  .libm.__PplusBdi
-                  0x0007ea         0x26 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x000854         0x26 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
  .libm.__PminusBdi
-                  0x000810         0x26 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x00087a         0x26 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
  .libm.__udivmoddi3
-                  0x000836         0xe6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
-                  0x000836                  ___udivmoddi3
+                  0x0008a0         0xe6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x0008a0                  ___udivmoddi3
  .libm.__udivdi3
-                  0x00091c          0xe c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
-                  0x00091c                  ___udivdi3
+                  0x000986          0xe c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x000986                  ___udivdi3
  .libm.__umoddi3
-                  0x00092a          0x8 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
-                  0x00092a                  ___umoddi3
+                  0x000994          0x8 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x000994                  ___umoddi3
  .libm.__divdi3
-                  0x000932         0x60 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
-                  0x000932                  ___divdi3
+                  0x00099c         0x60 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x00099c                  ___divdi3
  .libm.__moddi3
-                  0x000992         0x5c c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
-                  0x000992                  ___moddi3
+                  0x0009fc         0x5c c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x0009fc                  ___moddi3
  .libm.__muldi3
-                  0x0009ee         0x52 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(muldi3.eo)
-                  0x0009ee                  ___muldi3
+                  0x000a58         0x52 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(muldi3.eo)
+                  0x000a58                  ___muldi3
  .libm.fcompare
-                  0x000a40         0x36 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fcompare.eo)
-                  0x000a40                  __fcompare
+                  0x000aaa         0x36 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fcompare.eo)
+                  0x000aaa                  __fcompare
  .libm.floatdisf
-                  0x000a76         0x20 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatdisf.eo)
-                  0x000a76                  ___floatdisf
+                  0x000ae0         0x20 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatdisf.eo)
+                  0x000ae0                  ___floatdisf
  .libm.floatundisf
-                  0x000a96         0x5e c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatundisf.eo)
-                  0x000a96                  ___floatundisf
- .libm.umuldi3    0x000af4         0x44 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(umuldi3.eo)
-                  0x000af4                  ___umuldi3
- .libc.strlen     0x000b38          0xc c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libc-elf.a(strlen.eo)
-                  0x000b38                  _strlen
+                  0x000b00         0x5e c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatundisf.eo)
+                  0x000b00                  ___floatundisf
+ .libm.umuldi3    0x000b5e         0x44 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(umuldi3.eo)
+                  0x000b5e                  ___umuldi3
+ .libc.strlen     0x000ba2          0xc c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libc-elf.a(strlen.eo)
+                  0x000ba2                  _strlen
 
 usercode
  *(usercode)
@@ -774,7 +782,7 @@ __FSS
 
 __FGS             0xf80004          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf80004          0x2 /CW/_FGS(s×
+ __FGS.sec        0xf80004          0x2 /CW/_FGS<Ì
                   0xf80004                  __FGS.sec
 
 __FOSCSEL
@@ -807,75 +815,75 @@ __FUID3
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x93e7
+.debug_info       0x000000       0x9560
  *(.debug_info)
- .debug_info      0x000000        0x8c9 build/default/debug/main.o
- .debug_info      0x0008c9        0xb76 build/default/debug/IO.o
- .debug_info      0x00143f        0x522 build/default/debug/oscillator.o
- .debug_info      0x001961        0xd88 build/default/debug/PWM.o
- .debug_info      0x0026e9        0x2a9 build/default/debug/Toolbox.o
- .debug_info      0x002992        0x287 build/default/debug/OutputCompare.o
- .debug_info      0x002c19       0x1a24 build/default/debug/UTLN_Timers.o
- .debug_info      0x00463d        0xc93 build/default/debug/ADC.o
- .debug_info      0x0052d0       0x1b16 build/default/debug/UTLN_uart.o
- .debug_info      0x006de6        0x8c8 build/default/debug/UTLN_Communication.o
- .debug_info      0x0076ae        0x393 build/default/debug/Utilities.o
- .debug_info      0x007a41        0x26f build/default/debug/RespiratorState.o
- .debug_info      0x007cb0       0x1347 build/default/debug/ustv_i2c_interrupt.o
- .debug_info      0x008ff7        0x3f0 build/default/debug/UTLN_D6F-PH.o
+ .debug_info      0x000000        0x99c build/default/debug/main.o
+ .debug_info      0x00099c        0xb76 build/default/debug/IO.o
+ .debug_info      0x001512        0x522 build/default/debug/oscillator.o
+ .debug_info      0x001a34        0xd88 build/default/debug/PWM.o
+ .debug_info      0x0027bc        0x2a9 build/default/debug/Toolbox.o
+ .debug_info      0x002a65        0x287 build/default/debug/OutputCompare.o
+ .debug_info      0x002cec       0x1a24 build/default/debug/UTLN_Timers.o
+ .debug_info      0x004710        0xc93 build/default/debug/ADC.o
+ .debug_info      0x0053a3       0x1b16 build/default/debug/UTLN_uart.o
+ .debug_info      0x006eb9        0x91b build/default/debug/UTLN_Communication.o
+ .debug_info      0x0077d4        0x393 build/default/debug/Utilities.o
+ .debug_info      0x007b67        0x2c2 build/default/debug/RespiratorState.o
+ .debug_info      0x007e29       0x1347 build/default/debug/ustv_i2c_interrupt.o
+ .debug_info      0x009170        0x3f0 build/default/debug/UTLN_D6F-PH.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000       0x10ab
+.debug_abbrev     0x000000       0x10cf
  *(.debug_abbrev)
- .debug_abbrev    0x000000        0x1b8 build/default/debug/main.o
- .debug_abbrev    0x0001b8         0xeb build/default/debug/IO.o
- .debug_abbrev    0x0002a3         0xc3 build/default/debug/oscillator.o
- .debug_abbrev    0x000366        0x140 build/default/debug/PWM.o
- .debug_abbrev    0x0004a6         0x6d build/default/debug/Toolbox.o
- .debug_abbrev    0x000513         0xd8 build/default/debug/OutputCompare.o
- .debug_abbrev    0x0005eb        0x188 build/default/debug/UTLN_Timers.o
- .debug_abbrev    0x000773          0x1 build/default/debug/UTLN_Typedefs.o
- .debug_abbrev    0x000774        0x12a build/default/debug/ADC.o
- .debug_abbrev    0x00089e        0x219 build/default/debug/UTLN_uart.o
- .debug_abbrev    0x000ab7        0x1c3 build/default/debug/UTLN_Communication.o
- .debug_abbrev    0x000c7a         0xab build/default/debug/Utilities.o
- .debug_abbrev    0x000d25         0x8c build/default/debug/RespiratorState.o
- .debug_abbrev    0x000db1        0x20f build/default/debug/ustv_i2c_interrupt.o
- .debug_abbrev    0x000fc0         0xeb build/default/debug/UTLN_D6F-PH.o
+ .debug_abbrev    0x000000        0x1dc build/default/debug/main.o
+ .debug_abbrev    0x0001dc         0xeb build/default/debug/IO.o
+ .debug_abbrev    0x0002c7         0xc3 build/default/debug/oscillator.o
+ .debug_abbrev    0x00038a        0x140 build/default/debug/PWM.o
+ .debug_abbrev    0x0004ca         0x6d build/default/debug/Toolbox.o
+ .debug_abbrev    0x000537         0xd8 build/default/debug/OutputCompare.o
+ .debug_abbrev    0x00060f        0x188 build/default/debug/UTLN_Timers.o
+ .debug_abbrev    0x000797          0x1 build/default/debug/UTLN_Typedefs.o
+ .debug_abbrev    0x000798        0x12a build/default/debug/ADC.o
+ .debug_abbrev    0x0008c2        0x219 build/default/debug/UTLN_uart.o
+ .debug_abbrev    0x000adb        0x1c3 build/default/debug/UTLN_Communication.o
+ .debug_abbrev    0x000c9e         0xab build/default/debug/Utilities.o
+ .debug_abbrev    0x000d49         0x8c build/default/debug/RespiratorState.o
+ .debug_abbrev    0x000dd5        0x20f build/default/debug/ustv_i2c_interrupt.o
+ .debug_abbrev    0x000fe4         0xeb build/default/debug/UTLN_D6F-PH.o
 
-.debug_line       0x000000        0xf53
+.debug_line       0x000000        0xf74
  *(.debug_line)
- .debug_line      0x000000        0x189 build/default/debug/main.o
- .debug_line      0x000189        0x100 build/default/debug/IO.o
- .debug_line      0x000289         0xed build/default/debug/oscillator.o
- .debug_line      0x000376        0x11f build/default/debug/PWM.o
- .debug_line      0x000495         0x76 build/default/debug/Toolbox.o
- .debug_line      0x00050b         0xef build/default/debug/OutputCompare.o
- .debug_line      0x0005fa        0x231 build/default/debug/UTLN_Timers.o
- .debug_line      0x00082b         0x1a build/default/debug/UTLN_Typedefs.o
- .debug_line      0x000845        0x11d build/default/debug/ADC.o
- .debug_line      0x000962        0x14b build/default/debug/UTLN_uart.o
- .debug_line      0x000aad        0x1a5 build/default/debug/UTLN_Communication.o
- .debug_line      0x000c52         0x5d build/default/debug/Utilities.o
- .debug_line      0x000caf         0x44 build/default/debug/RespiratorState.o
- .debug_line      0x000cf3        0x1fc build/default/debug/ustv_i2c_interrupt.o
- .debug_line      0x000eef         0x64 build/default/debug/UTLN_D6F-PH.o
+ .debug_line      0x000000        0x1a0 build/default/debug/main.o
+ .debug_line      0x0001a0        0x100 build/default/debug/IO.o
+ .debug_line      0x0002a0         0xed build/default/debug/oscillator.o
+ .debug_line      0x00038d        0x11f build/default/debug/PWM.o
+ .debug_line      0x0004ac         0x76 build/default/debug/Toolbox.o
+ .debug_line      0x000522         0xef build/default/debug/OutputCompare.o
+ .debug_line      0x000611        0x231 build/default/debug/UTLN_Timers.o
+ .debug_line      0x000842         0x1a build/default/debug/UTLN_Typedefs.o
+ .debug_line      0x00085c        0x11d build/default/debug/ADC.o
+ .debug_line      0x000979        0x14b build/default/debug/UTLN_uart.o
+ .debug_line      0x000ac4        0x1af build/default/debug/UTLN_Communication.o
+ .debug_line      0x000c73         0x5d build/default/debug/Utilities.o
+ .debug_line      0x000cd0         0x44 build/default/debug/RespiratorState.o
+ .debug_line      0x000d14        0x1fc build/default/debug/ustv_i2c_interrupt.o
+ .debug_line      0x000f10         0x64 build/default/debug/UTLN_D6F-PH.o
 
-.debug_frame      0x000000        0xde2
+.debug_frame      0x000000        0xdee
  *(.debug_frame)
- .debug_frame     0x000000         0xa8 build/default/debug/main.o
- .debug_frame     0x0000a8         0x84 build/default/debug/IO.o
- .debug_frame     0x00012c         0x30 build/default/debug/oscillator.o
- .debug_frame     0x00015c         0xc8 build/default/debug/PWM.o
- .debug_frame     0x000224        0x13a build/default/debug/Toolbox.o
- .debug_frame     0x00035e         0x4c build/default/debug/OutputCompare.o
- .debug_frame     0x0003aa        0x23a build/default/debug/UTLN_Timers.o
- .debug_frame     0x0005e4         0xce build/default/debug/ADC.o
- .debug_frame     0x0006b2        0x25c build/default/debug/UTLN_uart.o
- .debug_frame     0x00090e         0xfc build/default/debug/UTLN_Communication.o
- .debug_frame     0x000a0a         0xc2 build/default/debug/Utilities.o
- .debug_frame     0x000acc        0x25a build/default/debug/ustv_i2c_interrupt.o
- .debug_frame     0x000d26         0xbc build/default/debug/UTLN_D6F-PH.o
+ .debug_frame     0x000000         0xb4 build/default/debug/main.o
+ .debug_frame     0x0000b4         0x84 build/default/debug/IO.o
+ .debug_frame     0x000138         0x30 build/default/debug/oscillator.o
+ .debug_frame     0x000168         0xc8 build/default/debug/PWM.o
+ .debug_frame     0x000230        0x13a build/default/debug/Toolbox.o
+ .debug_frame     0x00036a         0x4c build/default/debug/OutputCompare.o
+ .debug_frame     0x0003b6        0x23a build/default/debug/UTLN_Timers.o
+ .debug_frame     0x0005f0         0xce build/default/debug/ADC.o
+ .debug_frame     0x0006be        0x25c build/default/debug/UTLN_uart.o
+ .debug_frame     0x00091a         0xfc build/default/debug/UTLN_Communication.o
+ .debug_frame     0x000a16         0xc2 build/default/debug/Utilities.o
+ .debug_frame     0x000ad8        0x25a build/default/debug/ustv_i2c_interrupt.o
+ .debug_frame     0x000d32         0xbc build/default/debug/UTLN_D6F-PH.o
 
 .debug_str        0x000000        0x62f
  *(.debug_str)
@@ -2075,7 +2083,7 @@ LOAD c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a
 LOAD c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libc-elf.a
 END GROUP
 OUTPUT(dist/default/debug/Respirateur_V1.X.debug.elf elf32-pic30)
-LOAD /CW/_FGS(s×
+LOAD /CW/_FGS<Ì
 LOAD jump_table
 LOAD default_isr
 LOAD data_init
@@ -2110,7 +2118,7 @@ LOAD data_init
                   0x000b52         0x12 build/default/debug/UTLN_D6F-PH.o
 
 __c30_signature
-                  0x000b64         0xe4
+                  0x000b64         0xf0
  __c30_signature
                   0x000b64          0x6 build/default/debug/main.o
  __c30_signature
@@ -2174,21 +2182,25 @@ __c30_signature
  __c30_signature
                   0x000c18          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(mulsf3.eo)
  __c30_signature
-                  0x000c1e          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
+                  0x000c1e          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(sqrtf.eo)
  __c30_signature
-                  0x000c24          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(muldi3.eo)
+                  0x000c24          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(divmoddi3.eo)
  __c30_signature
-                  0x000c2a          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fcompare.eo)
+                  0x000c2a          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(muldi3.eo)
  __c30_signature
-                  0x000c30          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatdisf.eo)
+                  0x000c30          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(errno.eo)
  __c30_signature
-                  0x000c36          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatundisf.eo)
+                  0x000c36          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(fcompare.eo)
  __c30_signature
-                  0x000c3c          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(umuldi3.eo)
+                  0x000c3c          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatdisf.eo)
  __c30_signature
-                  0x000c42          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libc-elf.a(strlen.eo)
+                  0x000c42          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(floatundisf.eo)
+ __c30_signature
+                  0x000c48          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(umuldi3.eo)
+ __c30_signature
+                  0x000c4e          0x6 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libc-elf.a(strlen.eo)
 
-.nbss               0x0850         0x50
+.nbss               0x0850         0x52
  .nbss              0x0850         0x18 build/default/debug/PWM.o
                     0x0850                  _timestampSansCollisionDroit
                     0x0854                  _timestampSansCollisionGauche
@@ -2233,21 +2245,23 @@ __c30_signature
  .nbss              0x089e          0x2 build/default/debug/ADC.o
                     0x089e                  _ADCResultIndex
                     0x089f                  _ADCConversionFinishedFlag
+ .nbss              0x08a0          0x2 c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a(errno.eo)
+                    0x08a0                  _errno
 
-.bss                0x08a0        0xccc
- .bss               0x08a0        0x90a build/default/debug/ustv_i2c_interrupt.o
-                    0x08a0                  _currentI2CMsg
-                    0x09a1                  _I2C1Value
- .bss               0x11aa        0x200 build/default/debug/UTLN_uart.o
-                    0x11aa                  _UART1RxBuffer
-                    0x12aa                  _UART1TxBuffer
- .bss               0x13aa        0x180 build/default/debug/UTLN_Communication.o
-                    0x13aa                  _rx1ReceivedPayload
- .bss               0x152a         0x2e build/default/debug/RespiratorState.o
-                    0x152a                  _respiratorState
- .bss               0x1558          0xa build/default/debug/UTLN_Timers.o
-                    0x1558                  _callBack
- .bss               0x1562          0xa build/default/debug/ADC.o
+.bss                0x08a2        0xcdc
+ .bss               0x08a2        0x90a build/default/debug/ustv_i2c_interrupt.o
+                    0x08a2                  _currentI2CMsg
+                    0x09a3                  _I2C1Value
+ .bss               0x11ac        0x200 build/default/debug/UTLN_uart.o
+                    0x11ac                  _UART1RxBuffer
+                    0x12ac                  _UART1TxBuffer
+ .bss               0x13ac        0x180 build/default/debug/UTLN_Communication.o
+                    0x13ac                  _rx1ReceivedPayload
+ .bss               0x152c         0x3e build/default/debug/RespiratorState.o
+                    0x152c                  _respiratorState
+ .bss               0x156a          0xa build/default/debug/UTLN_Timers.o
+                    0x156a                  _callBack
+ .bss               0x1574          0xa build/default/debug/ADC.o
 
 .config_JTAGEN    0xf8000e          0x2
  .config_JTAGEN
@@ -2317,121 +2331,121 @@ __c30_signature
  .ivt._MI2C1Interrupt
                   0x000036          0x2 build/default/debug/ustv_i2c_interrupt.o
 
-.const              0x8b44         0x12 load address 0x000b44  
- .const             0x8b44         0x12 build/default/debug/UTLN_D6F-PH.o
+.const              0x8bae         0x12 load address 0x000bae  
+ .const             0x8bae         0x12 build/default/debug/UTLN_D6F-PH.o
 
-.text             0x000b56       0x1c12
- .text            0x000b56        0x6d2 build/default/debug/UTLN_Timers.o
-                  0x000b56                  _SetTimerFreq
-                  0x000fda                  _SetTimerInterruptPriority
-                  0x0010d2                  _RegisterTimerCallBack
-                  0x0010fa                  _SetTimerPeriodMs
-                  0x001120                  _SetTimerPeriodUs
-                  0x001146                  _TurnOnOffTimer
-                  0x0011c8                  _InitTimerWithCallBack
-                  0x0011f2                  _RegisterTimerWithCallBack
- .text            0x001228        0x522 build/default/debug/UTLN_Communication.o
-                  0x001228                  _UartCalculateChecksum
-                  0x001278                  _Uart1DecodeMessage
-                  0x001342                  _SendMessageTxUART
-                  0x001350                  _ProcessMessage
-                  0x001658                  _MakeAndSendMessageWithUTLNProtocol
-                  0x0016f6                  _SendMessageToUart1
-                  0x001722                  _SendWelcomeMessage
-                  0x001730                  _SendErrorText
- .text            0x00174a        0x45a build/default/debug/ustv_i2c_interrupt.o
-                  0x00174a                  _InitI2C1
-                  0x0017ba                  _I2C1Read1
-                  0x0017d0                  _I2C1Write1
-                  0x0017ea                  _I2C1WriteNInterrupt
-                  0x00186a                  _I2C1ReadNInterrupt
-                  0x001922                  _I2C1WriteNReadNInterrupt
-                  0x0019ee                  _IncrementI2C1AntiBlockCounter
-                  0x0019fa                  _ResetI2C1AntiBlockCounter
-                  0x001a02                  _SetI2C1Crash
-                  0x001a0c                  _ResetI2CCrash
-                  0x001a14                  _IsI2CCrashed
-                  0x001a1c                  _StartI2C1Message
-                  0x001a4a                  _I2C1TransmissionOperation
-                  0x001b16                  _I2C1IsTransmissionActive
-                  0x001b28                  _I2C1WriteToBuffer
-                  0x001b56                  _I2C1IsDataReadyInBuffer
-                  0x001b6c                  _I2C1ReadFromBuffer
- .text            0x001ba4        0x34e build/default/debug/main.o
-                  0x001ba4                  _main
-                  0x001de2                  _Timer2CallBack
-                  0x001de8                  _Timer3CallBack
-                  0x001e78                  _Timer4CallBack
-                  0x001e8a                  _Timer5CallBack
- .text            0x001ef2        0x1e0 build/default/debug/Toolbox.o
-                  0x001ef2                  _ModuloAngleDegre
-                  0x001f40                  _Abs
-                  0x001f66                  _Max
-                  0x001f92                  _Min
-                  0x001fbe                  _Modulo2PIAngleRadian
-                  0x00200c                  _ModuloPIAngleRadian
-                  0x00205a                  _Limiteur
-                  0x0020a6                  _RadianToDegree
-                  0x0020bc                  _DegreeToRadian
- .text            0x0020d2        0x1d4 build/default/debug/UTLN_uart.o
-                  0x0020d2                  _initUART1
-                  0x002130                  _UART1ResetRxBuffer
-                  0x00213a                  _UART1ResetTxBuffer
-                  0x002144                  _UART1ReadToRxBuffer
-                  0x002166                  _UART1IsDataReadyInRxBuffer
-                  0x00217a                  _UART1ReadFromRxBuffer
-                  0x00219a                  _UART1WriteToTxBuffer
-                  0x0021c4                  _UART1IsDataReadyInTxBuffer
-                  0x0021d8                  _UART1WriteFromTxBuffer
-                  0x002202                  _UART1GetNbOfValuesInTxBuffer
-                  0x002220                  _UART1GetRemainingSpaceInTxBuffer
-                  0x00222c                  _UART1IncrementTxAntiBlockCounter
-                  0x002232                  _UART1ResetTxAntiBlockCounter
-                  0x00223a                  _UART1MonitorAndFixTxTransmission
-                  0x002260                  _initUART2
- .text            0x0022a6        0x13c build/default/debug/PWM.o
-                  0x0022a6                  _InitPWM
-                  0x0022de                  _InitPWM2
-                  0x002308                  _PWM2SetSpeedConsigne
-                  0x00232a                  _PWM2UpdatePeriod
-                  0x00236e                  _PWMSetSpeedConsigne
-                  0x0023a0                  _PWMUpdateSpeed
- .text            0x0023e2        0x12e build/default/debug/UTLN_D6F-PH.o
-                  0x0023e2                  _adc_wait
-                  0x002402                  _D6F_PHInitialize
-                  0x00241c                  _D6FStartMeasurement
-                  0x002434                  _D6FPress_meas
-                  0x0024a0                  _D6FTemp_meas
-                  0x002502                  _D6FHarwareReset
- .text            0x002510        0x112 build/default/debug/Utilities.o
-                  0x002510                  _getFloat
-                  0x00252c                  _getDouble
-                  0x002540                  _getBytesFromFloat
-                  0x002572                  _getBytesFromInt32
-                  0x0025a6                  _getBytesFromDouble
-                  0x0025d8                  _LimitToInterval
- .text            0x002622         0x7e build/default/debug/IO.o
-                  0x002622                  _InitIO
-                  0x00266e                  _LockIO
-                  0x002680                  _UnlockIO
-                  0x002692                  _InitCN
- .text            0x0026a0         0x76 build/default/debug/ADC.o
-                  0x0026a0                  _InitADC1
-                  0x0026f6                  _ADC1StartConversionSequence
-                  0x0026fe                  _ADCGetResult
-                  0x002706                  _ADCIsConversionFinished
-                  0x00270e                  _ADCClearConversionFinishedFlag
- .text            0x002716         0x52 build/default/debug/oscillator.o
-                  0x002716                  _InitOscillator
+.text             0x000bc0       0x1d14
+ .text            0x000bc0        0x6d2 build/default/debug/UTLN_Timers.o
+                  0x000bc0                  _SetTimerFreq
+                  0x001044                  _SetTimerInterruptPriority
+                  0x00113c                  _RegisterTimerCallBack
+                  0x001164                  _SetTimerPeriodMs
+                  0x00118a                  _SetTimerPeriodUs
+                  0x0011b0                  _TurnOnOffTimer
+                  0x001232                  _InitTimerWithCallBack
+                  0x00125c                  _RegisterTimerWithCallBack
+ .text            0x001292        0x56a build/default/debug/UTLN_Communication.o
+                  0x001292                  _UartCalculateChecksum
+                  0x0012e2                  _Uart1DecodeMessage
+                  0x0013ac                  _SendMessageTxUART
+                  0x0013ba                  _ProcessMessage
+                  0x00170a                  _MakeAndSendMessageWithUTLNProtocol
+                  0x0017a8                  _SendMessageToUart1
+                  0x0017d4                  _SendWelcomeMessage
+                  0x0017e2                  _SendErrorText
+ .text            0x0017fc        0x45a build/default/debug/main.o
+                  0x0017fc                  _main
+                  0x001b2a                  _Timer2CallBack
+                  0x001b30                  _Timer3CallBack
+                  0x001bc0                  _Timer4CallBack
+                  0x001bd2                  _Timer5CallBack
+ .text            0x001c56        0x45a build/default/debug/ustv_i2c_interrupt.o
+                  0x001c56                  _InitI2C1
+                  0x001cc6                  _I2C1Read1
+                  0x001cdc                  _I2C1Write1
+                  0x001cf6                  _I2C1WriteNInterrupt
+                  0x001d76                  _I2C1ReadNInterrupt
+                  0x001e2e                  _I2C1WriteNReadNInterrupt
+                  0x001efa                  _IncrementI2C1AntiBlockCounter
+                  0x001f06                  _ResetI2C1AntiBlockCounter
+                  0x001f0e                  _SetI2C1Crash
+                  0x001f18                  _ResetI2CCrash
+                  0x001f20                  _IsI2CCrashed
+                  0x001f28                  _StartI2C1Message
+                  0x001f56                  _I2C1TransmissionOperation
+                  0x002022                  _I2C1IsTransmissionActive
+                  0x002034                  _I2C1WriteToBuffer
+                  0x002062                  _I2C1IsDataReadyInBuffer
+                  0x002078                  _I2C1ReadFromBuffer
+ .text            0x0020b0        0x1e0 build/default/debug/Toolbox.o
+                  0x0020b0                  _ModuloAngleDegre
+                  0x0020fe                  _Abs
+                  0x002124                  _Max
+                  0x002150                  _Min
+                  0x00217c                  _Modulo2PIAngleRadian
+                  0x0021ca                  _ModuloPIAngleRadian
+                  0x002218                  _Limiteur
+                  0x002264                  _RadianToDegree
+                  0x00227a                  _DegreeToRadian
+ .text            0x002290        0x1d4 build/default/debug/UTLN_uart.o
+                  0x002290                  _initUART1
+                  0x0022ee                  _UART1ResetRxBuffer
+                  0x0022f8                  _UART1ResetTxBuffer
+                  0x002302                  _UART1ReadToRxBuffer
+                  0x002324                  _UART1IsDataReadyInRxBuffer
+                  0x002338                  _UART1ReadFromRxBuffer
+                  0x002358                  _UART1WriteToTxBuffer
+                  0x002382                  _UART1IsDataReadyInTxBuffer
+                  0x002396                  _UART1WriteFromTxBuffer
+                  0x0023c0                  _UART1GetNbOfValuesInTxBuffer
+                  0x0023de                  _UART1GetRemainingSpaceInTxBuffer
+                  0x0023ea                  _UART1IncrementTxAntiBlockCounter
+                  0x0023f0                  _UART1ResetTxAntiBlockCounter
+                  0x0023f8                  _UART1MonitorAndFixTxTransmission
+                  0x00241e                  _initUART2
+ .text            0x002464        0x13c build/default/debug/PWM.o
+                  0x002464                  _InitPWM
+                  0x00249c                  _InitPWM2
+                  0x0024c6                  _PWM2SetSpeedConsigne
+                  0x0024e8                  _PWM2UpdatePeriod
+                  0x00252c                  _PWMSetSpeedConsigne
+                  0x00255e                  _PWMUpdateSpeed
+ .text            0x0025a0        0x12e build/default/debug/UTLN_D6F-PH.o
+                  0x0025a0                  _adc_wait
+                  0x0025c0                  _D6F_PHInitialize
+                  0x0025da                  _D6FStartMeasurement
+                  0x0025f2                  _D6FPress_meas
+                  0x00265e                  _D6FTemp_meas
+                  0x0026c0                  _D6FHarwareReset
+ .text            0x0026ce        0x112 build/default/debug/Utilities.o
+                  0x0026ce                  _getFloat
+                  0x0026ea                  _getDouble
+                  0x0026fe                  _getBytesFromFloat
+                  0x002730                  _getBytesFromInt32
+                  0x002764                  _getBytesFromDouble
+                  0x002796                  _LimitToInterval
+ .text            0x0027e0         0x7e build/default/debug/IO.o
+                  0x0027e0                  _InitIO
+                  0x00282c                  _LockIO
+                  0x00283e                  _UnlockIO
+                  0x002850                  _InitCN
+ .text            0x00285e         0x76 build/default/debug/ADC.o
+                  0x00285e                  _InitADC1
+                  0x0028b4                  _ADC1StartConversionSequence
+                  0x0028bc                  _ADCGetResult
+                  0x0028c4                  _ADCIsConversionFinished
+                  0x0028cc                  _ADCClearConversionFinishedFlag
 
-.dinit            0x002768         0x50
- .dinit           0x002768         0x50 data_init
+.dinit            0x0028d4         0x56
+ .dinit           0x0028d4         0x56 data_init
 
-.text             0x0027b8         0x24
- .text            0x0027b8         0x24 build/default/debug/OutputCompare.o
-                  0x0027b8                  _InitOC1
-                  0x0027cc                  _OC1GeneratePulse
+.text             0x00292a         0x76
+ .text            0x00292a         0x52 build/default/debug/oscillator.o
+                  0x00292a                  _InitOscillator
+ .text            0x00297c         0x24 build/default/debug/OutputCompare.o
+                  0x00297c                  _InitOC1
+                  0x002990                  _OC1GeneratePulse
 
-.init.delay32     0x0027dc         0x1c
- .init.delay32    0x0027dc         0x1c c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libpic30-elf.a(delay32.eo)
-                  0x0027dc                  ___delay32
+.init.delay32     0x0029a0         0x1c
+ .init.delay32    0x0029a0         0x1c c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libpic30-elf.a(delay32.eo)
+                  0x0029a0                  ___delay32

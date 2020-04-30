@@ -255,7 +255,7 @@ namespace WpfRespirateur_Interface
             double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
             oscilloRespiration.AddPointToLine(5, e.EmbeddedTimeStampInMs / 1000.0, pression2);
             double rho = 1.23;
-            double diametre = 0.023;        //en M
+            double diametre = 0.014;        //en M
             double diffPression = e.pressureSensor1-0.08;
             int sign=1;
             if (diffPression < 0)
@@ -263,8 +263,8 @@ namespace WpfRespirateur_Interface
             else
                 sign = 1;
             double vitesse = Math.Sqrt(2 * Math.Abs(diffPression) / rho)* sign;
-            //double surface = (diametre * diametre) / 4 * Math.PI;
-            double surface = 0.03*0.03;
+            double surface = (diametre * diametre) / 4 * Math.PI;
+            //double surface = 0.03*0.03;
             double debit = vitesse * surface;           //En M3/s
             
             if (vitesse > 0.01)
