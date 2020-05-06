@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WpfRespirateur_Interface.Properties
+namespace WpfRespirateur_InterfaceMonitor.Properties
 {
 
 

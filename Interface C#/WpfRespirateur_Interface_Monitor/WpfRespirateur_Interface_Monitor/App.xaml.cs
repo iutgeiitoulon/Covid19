@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfRespirateur_Interface
+namespace WpfRespirateur_Interface_Monitor
 {
     /// <summary>
     /// Logique d'interaction pour App.xaml
