@@ -93,6 +93,10 @@
       <Project>{d35c4eb6-23d1-480b-8a24-4e083b283d69}</Project>
       <Name>WpfRespirateur_Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\WpfRespirateur_Interface_Monitor\WpfRespirateur_Interface_Monitor\WpfRespirateur_Interface_Monitor.csproj">
+      <Project>{9565f2d4-f45e-47ce-aa73-709098b225a0}</Project>
+      <Name>WpfRespirateur_Interface_Monitor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WpfRespirateur_Interface;
+using WpfRespirateur_Interface_Monitor;
 using MessageGenerator;
 using MessageProcessor;
 using ExtendedSerialPort;
@@ -25,7 +26,9 @@ namespace Interface_Respirateur
         static MsgGenerator msgGenerator;
         static MsgProcessor msgProcessor;
 
-        static WpfRespirateurInterface respirateurInterface;
+        static WpfRespirateurInterface respirateurInterface;            //Pour debug
+
+        static WpfRespirateurMonitor respirateurInterfaceMonitor;     //Pour practicien
 
         static AdvancedTimers.HighFreqTimer timerSimulation;
 
@@ -78,10 +81,12 @@ namespace Interface_Respirateur
             {
                 //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
                 respirateurInterface = new WpfRespirateurInterface();
+                respirateurInterfaceMonitor = new WpfRespirateurMonitor();
                 respirateurInterface.Loaded += RegisterRespirateurEvents;
                 timerSimulation.Tick += respirateurInterface.SimulateDatas;
                 timerSimulation.Start();
                 respirateurInterface.ShowDialog();
+                respirateurInterfaceMonitor.ShowDialog();
 
             });
             t1.SetApartmentState(ApartmentState.STA);

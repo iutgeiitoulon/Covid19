@@ -263,8 +263,8 @@ namespace WpfRespirateur_Interface
             else
                 sign = 1;
             double vitesse = Math.Sqrt(2 * Math.Abs(diffPression) / rho)* sign;
-            double surface = (diametre * diametre) / 4 * Math.PI;
-            //double surface = 0.03*0.03;
+            //double surface = (diametre * diametre) / 4 * Math.PI;
+            double surface = 9.4/100000;                 //En M²
             double debit = vitesse * surface;           //En M3/s
             
             if (vitesse > 0.01)
