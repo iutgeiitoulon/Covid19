@@ -20,7 +20,7 @@ void InitIO() {
     _TRISC3=0;      //STEP2
     _TRISB15=0;     //DIR3
     _TRISB14=0;     //STEP3
-    _TRISA10 = 0; //Led 3 sur RA10
+    _TRISA10=0;     //Led 3 sur RA10
     _TRISA1=0;      //nRESET
     
     
@@ -34,9 +34,6 @@ void InitIO() {
     _TRISB4=1;      //FIN_COURSE5
     _TRISC2=1;      //FIN_COURSE6
     
-    _TRISC0=1;      //POT1
-    _TRISC1=1;      //POT2
-    _TRISC2=1;      //POT3
     
 
     //*************************************************************************/

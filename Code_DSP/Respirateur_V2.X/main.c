@@ -24,6 +24,11 @@
 volatile unsigned long g_longTimeStamp=0;
 
 extern BOOL startRespirator;
+
+void StateMachineMoteur1(void);
+void StateMachineMoteur2(void);
+void StateMachineMoteur3(void);
+
 void Timer1CallBack(void);
 void Timer2CallBack(void);
 void Timer3CallBack(void);
@@ -48,6 +53,7 @@ volatile unsigned long timeStampDebut=0;
 volatile unsigned long timeStampHighSpeed=0;
 unsigned char flagFinMontee=0;
 unsigned char flagFinDescente=0;
+unsigned long deadTime=100000;
 int main(void)
 {
     InitOscillator();
@@ -61,7 +67,7 @@ int main(void)
     //InitADC1();
     
     RegisterTimerWithCallBack(TIMER2_ID, 1000000.0, Timer2CallBack, true, 3, 1);   //Time base pulse OC
-    RegisterTimerWithCallBack(TIMER3_ID, 500.0, Timer3CallBack, true, 5, 0);//Gestion de la vitesse des pas a pas
+    RegisterTimerWithCallBack(TIMER3_ID, 1200.0, Timer3CallBack, true, 5, 0);//Gestion de la vitesse des pas a pas
     RegisterTimerWithCallBack(TIMER4_ID, 1000.0, Timer4CallBack, true, 6, 1);//TimeStamp
     RegisterTimerWithCallBack(TIMER5_ID, 50.0, Timer5CallBack, true, 4, 1);//Timer Send values
     InitOC1();
@@ -90,7 +96,7 @@ int main(void)
     respiratorState.vitesse=1300;
     respiratorState.pLimite=20000;      //en Pascals
     respiratorState.vLimite=0.0005;     //en M3
-    respiratorState.periode=2000000;    //(en us)
+    respiratorState.periode=8000000;    //(en us)
     
     double pressionCalculeeEmbarque=0;
     //STEP=1;
@@ -153,6 +159,10 @@ int main(void)
                     etat=INIT_0;
                     timeStampDebut=g_longTimeStamp;
                 }
+                else
+                {
+                    nRESET=0;       //Desactivation moteurs
+                }
                 break;
             case INIT_0:
                 respiratorState.consigneMoteur1=0;
@@ -192,8 +202,8 @@ int main(void)
 
 void StateMachineMoteur1(void)
 {
-    static etat1=0;
-    static cpt1=0;
+    static unsigned char etat1=0;
+    static unsigned int cpt1=0;
     switch(etat1)
     {
         case 0:timeStampHighSpeed=0;
@@ -203,27 +213,33 @@ void StateMachineMoteur1(void)
         //DESCENTE    
         case 1:
             cpt1++;
-        if(cpt1=3)
-        {
-            OC1GeneratePulse(); //On genere un pulse
-            cpt1=0;
-        }
-            if(timeStampHighSpeed> 2*respiratorState.periode/3 || FIN_COURSE1==0)
+            if(cpt1==3)
+            {
+                OC1GeneratePulse(); //On genere un pulse
+                cpt1=0;
+            }
+            if(timeStampHighSpeed> (2*respiratorState.periode/3) || FIN_COURSE1==0)
             {
                 etat1=2;
                 DIR1=SENS_MONTEE;
             }
             break;
+        //Attente    
+        case 2:if(timeStampHighSpeed>=2*respiratorState.periode/3+deadTime)
+                {
+                    etat1=3;
+                }
+            break;
         //MONTEE    
-        case 2:
+        case 3:
             OC1GeneratePulse(); //On genere un pulse
-            if( FIN_COURSE2==0)
+            if( FIN_COURSE2==0 || timeStampHighSpeed>=respiratorState.periode-deadTime)
             {
-                etat1=3;
+                etat1=4;
             }
             break;
         //ATTENTE    
-        case 3:
+        case 4:
             if(timeStampHighSpeed>=respiratorState.periode)
             {
                 etat1=0;
@@ -236,6 +252,11 @@ void StateMachineMoteur2(void)
 {
     static unsigned char etat2=0;
     static unsigned int cpt2=0;
+    
+    //Descente entre T/3 et T
+    //DeadTime Bas entre 0 et deadTime
+    //Montee entre deadTime et T/3-deadTime
+    //DeadTime Haut entre T/3-deadTime et T/3
     switch(etat2)
     {
         case 0:
@@ -244,28 +265,60 @@ void StateMachineMoteur2(void)
             break;
         //DESCENTE    
         case 1:
+        {
+            LED_BLANCHE=0;
+            LED_ROUGE =1;
+            
             cpt2++;
-            if(cpt2=3)
+            if(cpt2==3)
             {
                 OC2GeneratePulse(); //On genere un pulse
                 cpt2=0;
             }
-            if(timeStampHighSpeed> respiratorState.periode || timeStampHighSpeed==0 || FIN_COURSE3==0)
+            
+            //On teste si on est toujours en mode descente d'après le timestamp
+            int descenteActive = 0;
+            if(timeStampHighSpeed >= (respiratorState.periode/3) && timeStampHighSpeed < respiratorState.periode)
+                descenteActive = 1;
+                     
+            if(descenteActive == 0 || FIN_COURSE3==0)
             {
                 etat2=2;
                 DIR2=SENS_MONTEE;
             }
             break;
-        //MONTEE    
-        case 2:
-            OC2GeneratePulse(); //On genere un pulse
-            if( FIN_COURSE4==0)
+        }
+        //Dead Time Bas
+        case 2:            
+            LED_BLANCHE=0;
+            LED_ROUGE =0;
+            if(timeStampHighSpeed>=deadTime && timeStampHighSpeed<respiratorState.periode/3)
             {
                 etat2=3;
             }
-            break;
-        //ATTENTE    
+            break;            
+        //MONTEE    
         case 3:
+        {
+            LED_BLANCHE=1;
+            LED_ROUGE =0;
+            OC2GeneratePulse(); //On genere un pulse
+            
+            //On teste si on est toujours en mode descente d'après le timestamp
+            int monteeActive = 0;
+            if(timeStampHighSpeed >= deadTime && timeStampHighSpeed < respiratorState.periode/3-deadTime)
+                monteeActive = 1;
+            
+            if(monteeActive==0 || FIN_COURSE4==0)
+            {
+                etat2=4;
+            }
+            break;
+        }
+        //ATTENTE    
+        case 4:
+            LED_BLANCHE=0;
+            LED_ROUGE =0;
             if(timeStampHighSpeed>=respiratorState.periode/3)
             {
                 etat2=0;
@@ -287,28 +340,36 @@ void StateMachineMoteur3(void)
         //DESCENTE    
         case 1:
             cpt3++;
-            if(cpt3=3)
+            if(cpt3==3)
             {
                 OC3GeneratePulse(); //On genere un pulse
                 cpt3=0;
             }
-            if(timeStampHighSpeed> respiratorState.periode/3 || FIN_COURSE5==0)
+            if((timeStampHighSpeed>=(respiratorState.periode/3) && timeStampHighSpeed<(2*respiratorState.periode/3)) || FIN_COURSE5==0)
             {
                 etat3=2;
                 DIR3=SENS_MONTEE;
             }
             break;
-        //MONTEE    
+        //Attente    
         case 2:
-            OC3GeneratePulse(); //On genere un pulse
-            if( FIN_COURSE6==0)
+            if((timeStampHighSpeed>=(respiratorState.periode/3)+deadTime) && timeStampHighSpeed<(2*respiratorState.periode/3))
             {
-                etat3=3;
+                etat3=3;                
+            }
+            break;             
+        //MONTEE    
+        case 3:
+            OC3GeneratePulse(); //On genere un pulse
+            if( FIN_COURSE6==0  || (timeStampHighSpeed>=(2*respiratorState.periode/3)-deadTime))
+            {
+                etat3=4;
             }
             break;
+                 
         //ATTENTE    
-        case 3:
-            if(timeStampHighSpeed>=2*respiratorState.periode/3)
+        case 4:
+            if(timeStampHighSpeed>=(2*respiratorState.periode/3))
             {
                 etat3=0;
             }
