@@ -83,6 +83,7 @@ namespace Interface_Respirateur
                 respirateurInterface = new WpfRespirateurInterface();
                 respirateurInterfaceMonitor = new WpfRespirateurMonitor();
                 respirateurInterface.Loaded += RegisterRespirateurEvents;
+                respirateurInterfaceMonitor.Loaded += RegisterRespirateurMonitorEvents;
                 timerSimulation.Tick += respirateurInterface.SimulateDatas;
                 timerSimulation.Start();
                 respirateurInterface.ShowDialog();
@@ -114,6 +115,16 @@ namespace Interface_Respirateur
             msgProcessor.OnSetPauseTimeDownCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizePauseTimeDown;
             msgProcessor.OnSetPauseTimeUpCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizePauseTimeUp;
             msgProcessor.OnSetSpeedCallBackFromRespiratorGeneratedEvent += respirateurInterface.ActualizeSpeed;
+        }
+
+        static void RegisterRespirateurMonitorEvents(object sender, EventArgs e)
+        {
+            respirateurInterfaceMonitor.OnStartStopFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSartStop;
+
+            msgProcessor.OnPressureDataFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.UpdateVolumeDataOnGraph;
+
+            //Callback (confirmation reglage parametres)
+            msgProcessor.OnStartStopCallBackFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.ActualizeStartStopButton;
         }
     }
 }

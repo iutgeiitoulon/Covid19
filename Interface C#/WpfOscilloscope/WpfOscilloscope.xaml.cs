@@ -141,5 +141,19 @@ namespace WpfOscilloscopeControl
             lineDictionary[lineId].Clear();
             lineDictionary[lineId].Append(pointList.Select(e => e.X).ToList(), pointList.Select(e2 => e2.Y).ToList());
         }
+
+        public void SetAutoScaleY(bool activate)
+        {
+            if (activate)
+                sciChart.YAxis.AutoRange = SciChart.Charting.Visuals.Axes.AutoRange.Always;
+            else
+                sciChart.YAxis.AutoRange = SciChart.Charting.Visuals.Axes.AutoRange.Never;
+        }
+
+        public void SetYAxisScale(double minYScale, double maxYScale)
+        {
+            sciChart.YAxis.VisibleRangeLimit = new SciChart.Data.Model.DoubleRange(minYScale, maxYScale);
+            sciChart.YAxis.VisibleRange= new SciChart.Data.Model.DoubleRange(minYScale, maxYScale);
+        }
     }
 }

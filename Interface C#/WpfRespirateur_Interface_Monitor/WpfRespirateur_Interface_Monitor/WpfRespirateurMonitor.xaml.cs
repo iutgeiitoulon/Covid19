@@ -47,10 +47,15 @@ namespace WpfRespirateur_Interface_Monitor
             oscilloVolume.SetTitle("Courbe Volume");
             oscilloVolume.AddOrUpdateLine(0, 100, "Volume");
             oscilloVolume.ChangeLineColor(0, Colors.Red);
+            oscilloVolume.SetAutoScaleY(false);
+            oscilloVolume.SetYAxisScale(0, 3);
 
             oscilloPression.SetTitle("Courbe pression");
             oscilloPression.AddOrUpdateLine(0, 100, "Pression");
             oscilloPression.ChangeLineColor(0, Colors.Blue);
+            oscilloPression.SetAutoScaleY(false);
+            oscilloPression.SetYAxisScale(0, 5000);
+            
 
             timerAffichage = new DispatcherTimer();
             timerAffichage.Interval = new TimeSpan(0,0,0,0,100);
@@ -190,7 +195,8 @@ namespace WpfRespirateur_Interface_Monitor
         public void UpdateVolumeDataOnGraph(object sender, RespirateurDataEventArgs e)
         {
             oscilloVolume.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);
-            double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
+            oscilloPression.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2);
+            //double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
             double rho = 1.23;
             double diametre = 0.014;        //en M
             double diffPression = e.pressureSensor1-0.08;

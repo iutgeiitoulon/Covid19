@@ -252,8 +252,8 @@ namespace WpfRespirateur_Interface
         public void UpdateRespirationDataOnGraph(object sender, RespirateurDataEventArgs e)
         {
             oscilloRespiration.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);
-            double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
-            oscilloRespiration.AddPointToLine(5, e.EmbeddedTimeStampInMs / 1000.0, pression2);
+            //double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
+            oscilloRespiration.AddPointToLine(5, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2);
             double rho = 1.23;
             double diametre = 0.014;        //en M
             double diffPression = e.pressureSensor1-0.08;

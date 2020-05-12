@@ -29,7 +29,7 @@
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
-        <oscillo:WpfOscilloscope x:Name="oscilloVolume" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Padding="20" MouseDoubleClick="ZoomOnGraph_MouseDoubleClick"/>
+        <oscillo:WpfOscilloscope x:Name="oscilloVolume" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Padding="20" MouseDoubleClick="ZoomOnGraph_MouseDoubleClick" />
         <GroupBox Grid.ColumnSpan="2" Grid.Column="5" Header="Volume" HorizontalAlignment="Stretch"  Margin="0,0,0,-0" Grid.Row="1" Grid.RowSpan="1" VerticalAlignment="Stretch" FontSize="16" Foreground="#FFECECF2">
             <Grid>
                 <Grid.RowDefinitions>
@@ -62,7 +62,7 @@
                 </Viewbox>
             </Grid>
         </GroupBox>
-        <oscillo:WpfOscilloscope x:Name="oscilloPression" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Padding="20" MouseDoubleClick="ZoomOnGraph_MouseDoubleClick"/>
+        <oscillo:WpfOscilloscope x:Name="oscilloPression" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Padding="20" MouseDoubleClick="ZoomOnGraph_MouseDoubleClick" />
         <GroupBox Grid.ColumnSpan="2" Grid.Column="5" Header="Pression" HorizontalAlignment="Stretch"  Margin="0,0,0,-0" Grid.Row="3" Grid.RowSpan="1" VerticalAlignment="Stretch" FontSize="16" Foreground="#FFECECF2">
             <Grid>
                 <Grid.RowDefinitions>

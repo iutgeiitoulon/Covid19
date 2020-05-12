@@ -35,9 +35,8 @@ typedef struct robotStateBITS {
     union {
         struct {
             float pressure1;
-            double pressure2;
+            float pressure2;
             
-            unsigned char useExternalPotentiometre;
             double pLimite;             //Seuil pression limite
             double vLimite;             //Seuil volume limite
             double attenteHaut;         //Attente haut en miliseconde
@@ -55,9 +54,7 @@ typedef struct robotStateBITS {
             double cptMoteur1;
             double cptMoteur2;
             double cptMoteur3;
-            double consigneMoteur1;
-            double consigneMoteur2;
-            double consigneMoteur3;
+            
             
             unsigned long periode;
             
