@@ -769,7 +769,7 @@ __FSS
 
 __FGS             0xf80004          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf80004          0x2 /CW/_FGS€3æ
+ __FGS.sec        0xf80004          0x2 /CW/_FGS`óå
                   0xf80004                  __FGS.sec
 
 __FOSCSEL
@@ -2070,7 +2070,7 @@ LOAD c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libm-elf.a
 LOAD c:/program files (x86)/microchip/xc16/v1.35/bin/bin/../../lib\libc-elf.a
 END GROUP
 OUTPUT(dist/default/production/Respirateur_V2.X.production.elf elf32-pic30)
-LOAD /CW/_FGS€3æ
+LOAD /CW/_FGS`óå
 LOAD jump_table
 LOAD default_isr
 LOAD data_init

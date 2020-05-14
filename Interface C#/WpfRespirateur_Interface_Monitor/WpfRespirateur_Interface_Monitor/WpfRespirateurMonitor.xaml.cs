@@ -32,12 +32,9 @@ namespace WpfRespirateur_Interface_Monitor
         DateTime dateDebutSession = new DateTime();
         bool simulate = false;                           //Permet de simuler la carte pour verif affichage
 
-        int? amplitude;
-        int? offsetUp;
-        int? offsetDown;
-        double pauseTimeUp;
-        double pauseTimeDown;
-        double speed;
+        int cycles = 12;
+        int limiteCyclesBas = 6;
+        int limiteCyclesHaut = 20;
 
         public WpfRespirateurMonitor()
         {
@@ -48,13 +45,13 @@ namespace WpfRespirateur_Interface_Monitor
             oscilloVolume.AddOrUpdateLine(0, 100, "Volume");
             oscilloVolume.ChangeLineColor(0, Colors.Red);
             oscilloVolume.SetAutoScaleY(false);
-            oscilloVolume.SetYAxisScale(0, 3);
+            oscilloVolume.SetYAxisScale(0, 1.2);
 
             oscilloPression.SetTitle("Courbe pression");
             oscilloPression.AddOrUpdateLine(0, 100, "Pression");
             oscilloPression.ChangeLineColor(0, Colors.Blue);
             oscilloPression.SetAutoScaleY(false);
-            oscilloPression.SetYAxisScale(0, 5000);
+            oscilloPression.SetYAxisScale(0, 50);
             
 
             timerAffichage = new DispatcherTimer();
@@ -107,18 +104,33 @@ namespace WpfRespirateur_Interface_Monitor
             }
         }
 
-
+        int k = 0;
         public void TimerAffichage_Tick(object sender, EventArgs e)
         {
             dureeSession = DateTime.Now.Subtract(dateDebutSession);
             if(isStarted)
                 labelSessionDuree.Content = "Session Time:" + dureeSession.ToString(@"dd\.hh\:mm\:ss");
+
+            if(hasZoomed)
+            {
+                k++;
+                if (k == 5)
+                {
+                    oscilloVolume.SetAutoScaleY(false);
+                    oscilloVolume.SetYAxisScale(0, 1.2);
+                    oscilloPression.SetAutoScaleY(false);
+                    oscilloPression.SetYAxisScale(0, 50);
+                    hasZoomed = false;
+                    k = 0;
+                }
+            }
         }
 
         double zoomFactor = 5;
         bool isZoomed = false;
         int lastZoomedRow = 0;
         int lastZoomedCol = 0;
+        bool hasZoomed = false;
         private void ZoomOnGraph_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             int row = 0, column = 0;
@@ -161,8 +173,10 @@ namespace WpfRespirateur_Interface_Monitor
                     lastZoomedCol = column;
                     lastZoomedRow = row;
                     isZoomed = true;
+                    
                 }
             }
+            hasZoomed = true;
         }
 
 
@@ -192,10 +206,11 @@ namespace WpfRespirateur_Interface_Monitor
 
         #region InputEvents
         double volume = 0;
+        bool usePitot4mm = false;
         public void UpdateVolumeDataOnGraph(object sender, RespirateurDataEventArgs e)
         {
-            oscilloVolume.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);
-            oscilloPression.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2);
+            oscilloVolume.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, volume);      //Tube pito
+            oscilloPression.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2/100);     //Pression patient (mmH2o)
             //double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
             double rho = 1.23;
             double diametre = 0.014;        //en M
@@ -207,7 +222,16 @@ namespace WpfRespirateur_Interface_Monitor
                 sign = 1;
             double vitesse = Math.Sqrt(2 * Math.Abs(diffPression) / rho)* sign;
             //double surface = (diametre * diametre) / 4 * Math.PI;
-            double surface = 9.4/100000;                 //En M²
+            double surface = 1;
+            if (!usePitot4mm)
+            {
+                surface = 9.4 / 100000;                 //En M² pour tube en 4mm externe
+            }
+            else
+            {
+                surface = 7.26 / 100000;                //En M² pour tube en 6mm externe
+            }
+            //double surface = 7.26 / 100000;                 //En M² pour tube en 6mm externe
             double debit = vitesse * surface;           //En M3/s
             
             if (vitesse > 0.01)
@@ -369,6 +393,46 @@ namespace WpfRespirateur_Interface_Monitor
                 RadioButtonVolume.IsChecked = false;
                 isPilotageVolumeChecked = false;
             }
+        }
+
+        private void ButtonCycleP_Click(object sender, RoutedEventArgs e)
+        {
+            if (cycles < limiteCyclesHaut)
+            {
+                cycles++;
+                labelCycles.Content = cycles.ToString();
+            }
+        }
+
+        private void ButtonCycleM_Click(object sender, RoutedEventArgs e)
+        {
+            if (cycles > limiteCyclesBas)
+            {
+                cycles--;
+                labelCycles.Content = cycles.ToString();
+            }
+        }
+
+        private void ButtonPressionSet(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonVolumeSet(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItemUsePitot4_Checked(object sender, RoutedEventArgs e)
+        {
+            MenuItemUsePitot6.IsChecked = false;
+            usePitot4mm = true;
+        }
+
+        private void MenuItemUsePitot6_Checked(object sender, RoutedEventArgs e)
+        {
+            MenuItemUsePitot4.IsChecked = false;
+            usePitot4mm = false;
         }
     }
 }

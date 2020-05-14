@@ -498,7 +498,7 @@ void Timer5CallBack(void)
     unsigned char i2cOut[1];
     unsigned char i2cIn[2];
     I2C1WriteNReadNInterrupt( (0x28<<1), i2cOut,0, i2cIn, 2 );
-    respiratorState.pressure2= (float)(((BUILD_UINT16((i2cIn[0]&0x3F),i2cIn[1])-1520)&0x3FFF)*0.257724);
+    respiratorState.pressure2= (float)(((BUILD_UINT16((i2cIn[0]&0x3F),i2cIn[1])-1400)&0x3FFF)*0.257724);
     //if(respiratorState.pressure1>4000)
        // respiratorState.pressure1=0;
 //    ADC1StartConversionSequence();
