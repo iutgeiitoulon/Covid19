@@ -24,7 +24,11 @@ namespace EventArgsLibrary
     }
 
 
-   
+    public class MotorDoStepsArgs : EventArgs
+    {
+        public int motorNum;
+        public int steps;
+    }
 
     public class MessageDecodedArgs : EventArgs
     {

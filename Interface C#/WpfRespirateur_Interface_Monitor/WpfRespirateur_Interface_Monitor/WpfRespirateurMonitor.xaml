@@ -13,6 +13,7 @@
             <MenuItem Header="_Tools">
                 <MenuItem Name="MenuItemUsePitot4" Header="_Use Pitot 4mm" IsCheckable="True" IsChecked="False" Checked="MenuItemUsePitot4_Checked" />
                 <MenuItem Name="MenuItemUsePitot6" Header="_Use Pitot 6mm" IsCheckable="True" IsChecked="True" Checked="MenuItemUsePitot6_Checked" />
+                <MenuItem Name="MenuItemAdvanced" Header="_Advanced Interface" Click="MenuItemAdvanced_Click" />
             </MenuItem>
         </Menu>
 

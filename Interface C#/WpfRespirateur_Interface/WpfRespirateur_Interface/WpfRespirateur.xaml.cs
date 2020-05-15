@@ -79,10 +79,13 @@ namespace WpfRespirateur_Interface
             Thread.CurrentThread.CurrentUICulture = ci;
 
             //Here is the important part for databinding default converters
-            FrameworkElement.LanguageProperty.OverrideMetadata(
-                    typeof(FrameworkElement),
-                    new FrameworkPropertyMetadata(
-                        XmlLanguage.GetLanguage(ci.IetfLanguageTag)));
+            if (FrameworkElement.LanguageProperty.GetMetadata(typeof(FrameworkElement)) == null)
+            {
+                FrameworkElement.LanguageProperty.OverrideMetadata(
+                        typeof(FrameworkElement),
+                        new FrameworkPropertyMetadata(
+                            XmlLanguage.GetLanguage(ci.IetfLanguageTag)));
+            }
 
             //Among other code
             if (CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator != ".")
@@ -203,7 +206,7 @@ namespace WpfRespirateur_Interface
 
         private void DoStep_Click(object sender, RoutedEventArgs e)
         {
-            OnDoStepFromInterface((int)this.myUpDownControlDoSteps.Value);
+            OnDoStepFromInterface((int)this.comboBoxMotorNum.SelectedIndex+1,(int)this.myUpDownControlDoSteps.Value);
         }
 
         private void ButtonSetAmplitude_Click(object sender, RoutedEventArgs e)
@@ -461,13 +464,13 @@ namespace WpfRespirateur_Interface
             }
         }
 
-        public event EventHandler<Int32EventArgs> OnDoStepFromInterfaceGeneratedEvent;
-        public virtual void OnDoStepFromInterface(int nbSteps)
+        public event EventHandler<MotorDoStepsArgs> OnDoStepFromInterfaceGeneratedEvent;
+        public virtual void OnDoStepFromInterface(int motorNum,int nbSteps)
         {
             var handler = OnDoStepFromInterfaceGeneratedEvent;
             if (handler != null)
             {
-                handler(this, new Int32EventArgs { value = nbSteps });
+                handler(this, new MotorDoStepsArgs { motorNum =motorNum,steps= nbSteps });
             }
         }
 

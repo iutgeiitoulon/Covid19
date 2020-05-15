@@ -231,7 +231,9 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
             break;
         //DoSteps
         case 0x0003:
-            respiratorState.doStepsCount=BUILD_UINT32(payload[3],payload[2],payload[1],payload[0]);
+            respiratorState.doStepsMotorNum=payload[0];
+            respiratorState.doStepsCount=BUILD_UINT32(payload[4],payload[3],payload[2],payload[1]);
+            respiratorState.flagDoStepsCMD=true;
             break; 
         //Reset Steps Counter
         case 0x0004:

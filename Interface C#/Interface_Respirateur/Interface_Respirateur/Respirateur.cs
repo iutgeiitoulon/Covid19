@@ -59,8 +59,6 @@ namespace Interface_Respirateur
             //Gestion des messages reçu par le respirateur
             serialPort1.OnDataReceivedEvent += msgDecoder.DecodeMsgReceived;
             msgDecoder.OnMessageDecodedEvent += msgProcessor.ProcessDecodedMessage;
-
-            timerSimulation = new AdvancedTimers.HighFreqTimer(20.0);
             
 
             StartInterface();
@@ -80,20 +78,42 @@ namespace Interface_Respirateur
             t1 = new Thread(() =>
             {
                 //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
-                respirateurInterface = new WpfRespirateurInterface();
                 respirateurInterfaceMonitor = new WpfRespirateurMonitor();
-                respirateurInterface.Loaded += RegisterRespirateurEvents;
                 respirateurInterfaceMonitor.Loaded += RegisterRespirateurMonitorEvents;
-                timerSimulation.Tick += respirateurInterface.SimulateDatas;
-                timerSimulation.Start();
-                respirateurInterface.ShowDialog();
                 respirateurInterfaceMonitor.ShowDialog();
-
             });
             t1.SetApartmentState(ApartmentState.STA);
             t1.Start();
         }
 
+        static Thread t2;
+        static bool t2Started = false;
+        static void StartAdvancedInterface(object sender, EventArgs args)
+        {
+            if (!t2Started)
+            {
+                t2 = new Thread(() =>
+                {
+                //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
+                respirateurInterface = new WpfRespirateurInterface();
+                    
+                    try
+                    {
+
+                        respirateurInterface.Loaded += RegisterRespirateurEvents;
+                        respirateurInterface.ShowDialog();
+                    }
+                    catch
+                    {
+
+                    }
+                    t2Started = false;
+                });
+                t2.SetApartmentState(ApartmentState.STA);
+                t2.Start();
+                t2Started = true;
+            }
+        }
         static void RegisterRespirateurEvents(object sender, EventArgs e)
         {
             respirateurInterface.OnStartStopFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSartStop;
@@ -120,6 +140,7 @@ namespace Interface_Respirateur
         static void RegisterRespirateurMonitorEvents(object sender, EventArgs e)
         {
             respirateurInterfaceMonitor.OnStartStopFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSartStop;
+            respirateurInterfaceMonitor.OnStartAdvancedInterfaceFromInterfaceGeneratedEvent += StartAdvancedInterface;
 
             msgProcessor.OnPressureDataFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.UpdateVolumeDataOnGraph;
 

@@ -59,6 +59,7 @@ typedef struct robotStateBITS {
             unsigned long periode;
             
             unsigned char flagDoStepsCMD;
+            unsigned char doStepsMotorNum;
             unsigned long doStepsCount;
         } ;
     } ;

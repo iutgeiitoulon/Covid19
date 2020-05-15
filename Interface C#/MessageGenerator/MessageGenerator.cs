@@ -27,12 +27,13 @@ namespace MessageGenerator
             OnMessageToRespirator((Int16)Commands.EmergencySTOP, 1, payload);
         }
 
-        public void GenerateMessageDoStepsUpDown(object sender, Int32EventArgs e)
+        public void GenerateMessageDoStepsUpDown(object sender, MotorDoStepsArgs e)
         {
-            byte[] payload = new byte[1];
-            payload = e.value.GetBytes();
+            byte[] payload = new byte[54];
+            payload[0] = Convert.ToByte(e.motorNum);
+            payload.SetValueRange(e.steps.GetBytes(), 1);
 
-            OnMessageToRespirator((Int16)Commands.DoSteps, 4, payload);
+            OnMessageToRespirator((Int16)Commands.DoSteps, 5, payload);
         }
        
 
@@ -116,4 +117,6 @@ namespace MessageGenerator
             }
         }
     }
+
+
 }

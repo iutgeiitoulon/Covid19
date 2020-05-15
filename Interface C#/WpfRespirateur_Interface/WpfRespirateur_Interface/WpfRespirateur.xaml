@@ -93,12 +93,22 @@
                             </Grid.ColumnDefinitions>
                             <GroupBox Header="Do Steps" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="0" Grid.RowSpan="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" FontSize="12">
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button Name="DoStep" Content="Do Steps" HorizontalAlignment="Stretch" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="1" Click="DoStep_Click"/>
-                                    <xctk:IntegerUpDown Name="myUpDownControlDoSteps"  HorizontalAlignment="Stretch" Margin="5,5,5,5" Grid.Column="0" Maximum="500" Minimum="-500" Value="1"  />
+
+                                    <Button Name="DoStep" Content="Do Steps" HorizontalAlignment="Stretch" Margin="5,5,5,5" Grid.Row="1" VerticalAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="1" Click="DoStep_Click"/>
+                                    <xctk:IntegerUpDown Name="myUpDownControlDoSteps"  HorizontalAlignment="Stretch" Grid.Row="1" Margin="5,5,5,5" Grid.Column="0" Maximum="500" Minimum="-500" Value="1"  />
+                                    <ComboBox Name="comboBoxMotorNum" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Stretch">
+                                        <ComboBoxItem Content="Moteur 1" IsSelected="True"/>
+                                        <ComboBoxItem Content="Moteur 2"/>
+                                        <ComboBoxItem Content="Moteur 3"/>
+                                    </ComboBox>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Set Amplitude" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" FontSize="12">

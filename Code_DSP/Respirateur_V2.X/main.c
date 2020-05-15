@@ -43,7 +43,8 @@ typedef enum{
     ATTENTE_BAS,
     DESCENTE,
     ATTENTE_HAUT,
-    VENTILATION
+    VENTILATION,
+    MANUAL
 }ETAT;
 
 
@@ -162,6 +163,12 @@ int main(void)
                 {
                     nRESET=0;       //Desactivation moteurs
                 }
+                if(respiratorState.flagDoStepsCMD)
+                {
+                    etat=MANUAL;
+                    TurnOnOffTimer(TIMER3_ID,1);
+                    nRESET=1;
+                }
                 break;
             case INIT_0:
                 TurnOnOffTimer(TIMER3_ID,1);
@@ -239,6 +246,12 @@ int main(void)
                 if(!startRespirator)
                 {
                     TurnOnOffTimer(TIMER3_ID,0);
+                    etat=ARRET;
+                }
+                break;
+            case MANUAL:
+                if(respiratorState.flagDoStepsCMD==0)
+                {
                     etat=ARRET;
                 }
                 break;
@@ -438,40 +451,88 @@ void Timer2CallBack(void)
 //Timer generation des pulses
 void Timer3CallBack(void)
 {
-    if(boardVersion3Moteur)
+    if(respiratorState.flagDoStepsCMD)
     {
-        StateMachineMoteur1();
-        StateMachineMoteur2();
-        StateMachineMoteur3();
-    }
-    else
-    {
-        if(respiratorState.sensMoteur1==SENS_MONTEE)
+        if(respiratorState.doStepsCount>0)
         {
-            //Si on es dans le sens positif
-            OC1GeneratePulse(); //On genere un pulse
-            respiratorState.cptMoteur1++;              //On incremente le compteur
-
-            if(respiratorState.cptMoteur1>=respiratorState.amplitude)
+            if(respiratorState.doStepsMotorNum==1)
             {
-                flagFinMontee=1;
-                TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+                DIR1=SENS_MONTEE;
+                OC1GeneratePulse(); //On genere un pulse
             }
+            else if(respiratorState.doStepsMotorNum==2)
+            {
+                DIR2=SENS_MONTEE;
+                OC2GeneratePulse(); //On genere un pulse
+            }
+            else
+            {
+                DIR3=SENS_MONTEE;
+                OC3GeneratePulse(); //On genere un pulse
+            }
+            respiratorState.doStepsCount--;
+        }
+        else if(respiratorState.doStepsCount<0)
+        {
+            if(respiratorState.doStepsMotorNum==1)
+            {
+                DIR1=SENS_DESCENTE;
+                OC1GeneratePulse(); //On genere un pulse
+            }
+            else if(respiratorState.doStepsMotorNum==2)
+            {
+                DIR2=SENS_DESCENTE;
+                OC2GeneratePulse(); //On genere un pulse
+            }
+            else
+            {
+                DIR3=SENS_DESCENTE;
+                OC3GeneratePulse(); //On genere un pulse
+            }
+            respiratorState.doStepsCount++;
         }
         else
         {
-            //Si on es dans le sens negatif
-            OC1GeneratePulse(); //On genere un pulse
-            respiratorState.cptMoteur1--;              //On decremente le compteur
-            if(FIN_COURSE1==0)
+            respiratorState.flagDoStepsCMD=0;
+        }
+    }
+    else
+    {
+        if(boardVersion3Moteur)
+        {
+            StateMachineMoteur1();
+            StateMachineMoteur2();
+            StateMachineMoteur3();
+        }
+        else
+        {
+            if(respiratorState.sensMoteur1==SENS_MONTEE)
             {
-                flagFinDescente=1;
-                TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+                //Si on es dans le sens positif
+                OC1GeneratePulse(); //On genere un pulse
+                respiratorState.cptMoteur1++;              //On incremente le compteur
+
+                if(respiratorState.cptMoteur1>=respiratorState.amplitude)
+                {
+                    flagFinMontee=1;
+                    TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+                }
             }
-            if(respiratorState.cptMoteur1<=-30)
+            else
             {
-                flagFinDescente=1;
-                TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+                //Si on es dans le sens negatif
+                OC1GeneratePulse(); //On genere un pulse
+                respiratorState.cptMoteur1--;              //On decremente le compteur
+                if(FIN_COURSE1==0)
+                {
+                    flagFinDescente=1;
+                    TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+                }
+                if(respiratorState.cptMoteur1<=-30)
+                {
+                    flagFinDescente=1;
+                    TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
+                }
             }
         }
     }
@@ -498,9 +559,10 @@ void Timer5CallBack(void)
     unsigned char i2cOut[1];
     unsigned char i2cIn[2];
     I2C1WriteNReadNInterrupt( (0x28<<1), i2cOut,0, i2cIn, 2 );
-    respiratorState.pressure2= (float)(((BUILD_UINT16((i2cIn[0]&0x3F),i2cIn[1])-1400)&0x3FFF)*0.257724);
-    //if(respiratorState.pressure1>4000)
-       // respiratorState.pressure1=0;
+    respiratorState.pressure2= (float)(((BUILD_UINT16((i2cIn[0]&0x3F),i2cIn[1])-1400))*0.257724);
+    
+    if(respiratorState.pressure2<0)
+        respiratorState.pressure2=0;
 //    ADC1StartConversionSequence();
     if(subdiv++>=1)
     {

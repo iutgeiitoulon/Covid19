@@ -374,6 +374,15 @@ namespace WpfRespirateur_Interface_Monitor
             }
         }
 
+        public event EventHandler<EventArgs> OnStartAdvancedInterfaceFromInterfaceGeneratedEvent;
+        public virtual void OnStartAdvancedInterfaceFromInterface()
+        {
+            var handler = OnStartAdvancedInterfaceFromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new EventArgs() );
+            }
+        }
         #endregion
 
         bool isPilotageVolumeChecked = true;
@@ -433,6 +442,11 @@ namespace WpfRespirateur_Interface_Monitor
         {
             MenuItemUsePitot4.IsChecked = false;
             usePitot4mm = false;
+        }
+
+        private void MenuItemAdvanced_Click(object sender, RoutedEventArgs e)
+        {
+            OnStartAdvancedInterfaceFromInterface();
         }
     }
 }
