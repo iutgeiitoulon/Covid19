@@ -213,7 +213,7 @@ namespace WpfRespirateur_Interface_Monitor
             oscilloPression.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2/100);     //Pression patient (mmH2o)
             //double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
             double rho = 1.23;
-            double diametre = 0.014;        //en M
+            //double diametre = 0.014;        //en M
             double diffPression = e.pressureSensor1-0.08;
             int sign=1;
             if (diffPression < 0)
@@ -383,6 +383,16 @@ namespace WpfRespirateur_Interface_Monitor
                 handler(this, new EventArgs() );
             }
         }
+
+        public event EventHandler<Int32EventArgs> OnSetCyclesPerMinromInterfaceGeneratedEvent;
+        public virtual void OnSetCyclesPerMinFromInterface(Int32 val)
+        {
+            var handler = OnSetCyclesPerMinromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new Int32EventArgs { value = val });
+            }
+        }
         #endregion
 
         bool isPilotageVolumeChecked = true;
@@ -409,6 +419,7 @@ namespace WpfRespirateur_Interface_Monitor
             if (cycles < limiteCyclesHaut)
             {
                 cycles++;
+                OnSetCyclesPerMinFromInterface(cycles);
                 labelCycles.Content = cycles.ToString();
             }
         }
@@ -418,18 +429,21 @@ namespace WpfRespirateur_Interface_Monitor
             if (cycles > limiteCyclesBas)
             {
                 cycles--;
+                OnSetCyclesPerMinFromInterface(cycles);
                 labelCycles.Content = cycles.ToString();
             }
         }
 
         private void ButtonPressionSet(object sender, RoutedEventArgs e)
         {
-
+            double pressionMmH2o = Convert.ToDouble(textBoxPression.Text);
+            OnSetPlimitFromInterface(pressionMmH2o);
         }
 
         private void ButtonVolumeSet(object sender, RoutedEventArgs e)
         {
-
+            double volume = Convert.ToDouble(textBoxVolume.Text);
+            OnSetVlimitFromInterface(volume);
         }
 
         private void MenuItemUsePitot4_Checked(object sender, RoutedEventArgs e)
@@ -446,7 +460,7 @@ namespace WpfRespirateur_Interface_Monitor
 
         private void MenuItemAdvanced_Click(object sender, RoutedEventArgs e)
         {
-            OnStartAdvancedInterfaceFromInterface();
+                OnStartAdvancedInterfaceFromInterface();
         }
     }
 }

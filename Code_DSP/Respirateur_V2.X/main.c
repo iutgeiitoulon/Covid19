@@ -35,7 +35,9 @@ void Timer2CallBack(void);
 void Timer3CallBack(void);
 void Timer4CallBack(void);
 void Timer5CallBack(void);
+void CalculateRespiratorParameters(void);
 
+double surface=0;
 typedef enum{
     ARRET,
     INIT_0,
@@ -94,9 +96,10 @@ int main(void)
     respiratorState.cptMoteur2=0;
     respiratorState.cptMoteur3=0;
     respiratorState.vitesse=1300;
-    respiratorState.pLimite=20000;      //en Pascals
-    respiratorState.vLimite=0.0005;     //en M3
-    respiratorState.periode=8000000;    //(en us)
+    respiratorState.pLimite=2500;      //en Pascals
+    respiratorState.vLimite=0.5;     //en L
+    respiratorState.periode=2000000;    //(en us)
+    respiratorState.cyclesPerMinute=12;
     
     /****************************************************************************************************/
     // Determination du type de respirateur (1 moteur VS 3 Moteurs)
@@ -104,6 +107,8 @@ int main(void)
     if(FIN_COURSE5==0 && FIN_COURSE6==0)
     {
         boardVersion3Moteur=false;
+        surface=7.26/100000;
+        CalculateRespiratorParameters();
     }
     /****************************************************************************************************/
     // Boucle Principale
@@ -183,7 +188,7 @@ int main(void)
                     respiratorState.sensMoteur1=SENS_MONTEE;
                     DIR1=SENS_MONTEE;
                     TurnOnOffTimer(TIMER3_ID,1);
-                    
+                    respiratorState.volumeCourant=0;
                     etat=MONTEE;
                 }
                 if(!startRespirator)
@@ -192,6 +197,7 @@ int main(void)
                     etat=ARRET;
                 }
                 break;
+            //Montee en pression    
             case MONTEE:
                 if(flagFinMontee)
                 {
@@ -201,7 +207,7 @@ int main(void)
                     timeStampDebut=g_longTimeStamp;
                     etat=ATTENTE_HAUT;
                 }
-                if(respiratorState.pressure1>=respiratorState.pLimite || respiratorState.volumeCourant>=respiratorState.vLimite)
+                if(respiratorState.pressure2>=respiratorState.pLimite || respiratorState.volumeCourant>=respiratorState.vLimite)
                 {
                     timeStampDebut=g_longTimeStamp;
                     etat=ATTENTE_HAUT;
@@ -220,7 +226,7 @@ int main(void)
                     respiratorState.sensMoteur1=SENS_DESCENTE;
                     DIR1=SENS_DESCENTE;
                     TurnOnOffTimer(TIMER3_ID,1);
-                    
+                    timeStampDebut=g_longTimeStamp;
                     etat=DESCENTE;
                 }
                 if(!startRespirator)
@@ -233,7 +239,7 @@ int main(void)
                 if(flagFinDescente)
                 {
                     flagFinDescente=0;
-                    timeStampDebut=g_longTimeStamp;
+                    
                     etat=ATTENTE_BAS;
                 }
                 if(!startRespirator)
@@ -268,43 +274,51 @@ void StateMachineMoteur1(void)
     static unsigned int cpt1=0;
     switch(etat1)
     {
-        case 0:timeStampHighSpeed=0;
+        //Calage 0 (bas)
+        case 0:DIR1=SENS_DESCENTE;
+            OC1GeneratePulse();
+            if(FIN_COURSE1==0)
+            {
+                etat1=1;
+            }
+            break;
+        case 1:timeStampHighSpeed=0;
             DIR1=SENS_DESCENTE;
-            etat1=1;
+            etat1=2;
             break;
         //DESCENTE    
-        case 1:
+        case 2:
             cpt1++;
             if(cpt1==3)
             {
                 OC1GeneratePulse(); //On genere un pulse
-                cpt1=0;
+                cpt1=1;
             }
             if(timeStampHighSpeed> (2*respiratorState.periode/3) || FIN_COURSE1==0)
             {
-                etat1=2;
+                etat1=3;
                 DIR1=SENS_MONTEE;
             }
             break;
         //Attente    
-        case 2:if(timeStampHighSpeed>=2*respiratorState.periode/3+deadTime)
+        case 3:if(timeStampHighSpeed>=2*respiratorState.periode/3+deadTime)
                 {
-                    etat1=3;
+                    etat1=4;
                 }
             break;
         //MONTEE    
-        case 3:
+        case 4:
             OC1GeneratePulse(); //On genere un pulse
             if( FIN_COURSE2==0 || timeStampHighSpeed>=respiratorState.periode-deadTime)
             {
-                etat1=4;
+                etat1=5;
             }
             break;
         //ATTENTE    
-        case 4:
+        case 5:
             if(timeStampHighSpeed>=respiratorState.periode)
             {
-                etat1=0;
+                etat1=1;
             }
             break;
     }
@@ -321,12 +335,20 @@ void StateMachineMoteur2(void)
     //DeadTime Haut entre T/3-deadTime et T/3
     switch(etat2)
     {
-        case 0:
+        //Calage 0 (bas)
+        case 0:DIR1=SENS_DESCENTE;
+            OC2GeneratePulse();
+            if(FIN_COURSE3==0)
+            {
+                etat2=1;
+            }
+            break;
+        case 1:
             DIR2=SENS_DESCENTE;
-            etat2=1;
+            etat2=2;
             break;
         //DESCENTE    
-        case 1:
+        case 2:
         {
             LED_BLANCHE=0;
             LED_ROUGE =1;
@@ -335,7 +357,7 @@ void StateMachineMoteur2(void)
             if(cpt2==3)
             {
                 OC2GeneratePulse(); //On genere un pulse
-                cpt2=0;
+                cpt2=1;
             }
             
             //On teste si on est toujours en mode descente d'après le timestamp
@@ -345,22 +367,22 @@ void StateMachineMoteur2(void)
                      
             if(descenteActive == 0 || FIN_COURSE3==0)
             {
-                etat2=2;
+                etat2=3;
                 DIR2=SENS_MONTEE;
             }
             break;
         }
         //Dead Time Bas
-        case 2:            
+        case 3:            
             LED_BLANCHE=0;
             LED_ROUGE =0;
             if(timeStampHighSpeed>=deadTime && timeStampHighSpeed<respiratorState.periode/3)
             {
-                etat2=3;
+                etat2=4;
             }
             break;            
         //MONTEE    
-        case 3:
+        case 4:
         {
             LED_BLANCHE=1;
             LED_ROUGE =0;
@@ -373,17 +395,17 @@ void StateMachineMoteur2(void)
             
             if(monteeActive==0 || FIN_COURSE4==0)
             {
-                etat2=4;
+                etat2=5;
             }
             break;
         }
         //ATTENTE    
-        case 4:
+        case 5:
             LED_BLANCHE=0;
             LED_ROUGE =0;
             if(timeStampHighSpeed>=respiratorState.periode/3)
             {
-                etat2=0;
+                etat2=1;
             }
             break;
     }
@@ -395,45 +417,53 @@ void StateMachineMoteur3(void)
     static unsigned int cpt3=0;
     switch(etat3)
     {
-        case 0:
+        //Calage 0 (bas)
+        case 0:DIR1=SENS_DESCENTE;
+            OC3GeneratePulse();
+            if(FIN_COURSE5==0)
+            {
+                etat3=1;
+            }
+            break;        
+        case 1:
             DIR3=SENS_DESCENTE;
-            etat3=1;
+            etat3=2;
             break;
         //DESCENTE    
-        case 1:
+        case 2:
             cpt3++;
             if(cpt3==3)
             {
                 OC3GeneratePulse(); //On genere un pulse
-                cpt3=0;
+                cpt3=1;
             }
             if((timeStampHighSpeed>=(respiratorState.periode/3) && timeStampHighSpeed<(2*respiratorState.periode/3)) || FIN_COURSE5==0)
             {
-                etat3=2;
+                etat3=3;
                 DIR3=SENS_MONTEE;
             }
             break;
         //Attente    
-        case 2:
+        case 3:
             if((timeStampHighSpeed>=(respiratorState.periode/3)+deadTime) && timeStampHighSpeed<(2*respiratorState.periode/3))
             {
-                etat3=3;                
+                etat3=4;                
             }
             break;             
         //MONTEE    
-        case 3:
+        case 4:
             OC3GeneratePulse(); //On genere un pulse
             if( FIN_COURSE6==0  || (timeStampHighSpeed>=(2*respiratorState.periode/3)-deadTime))
             {
-                etat3=4;
+                etat3=5;
             }
             break;
                  
         //ATTENTE    
-        case 4:
+        case 5:
             if(timeStampHighSpeed>=(2*respiratorState.periode/3))
             {
-                etat3=0;
+                etat3=1;
             }
             break;
     }
@@ -537,15 +567,19 @@ void Timer3CallBack(void)
         }
     }
 }
+
+extern unsigned int antiBlockCounterI2C1;
 void Timer4CallBack(void)
 {
     g_longTimeStamp++;
+    antiBlockCounterI2C1++;
     //ADC1StartConversionSequence();
 }
 
+
 void Timer5CallBack(void)
 {
-    respiratorState.volumeCourant+=respiratorState.debitCourant/50.0;
+    //respiratorState.volumeCourant+=respiratorState.debitCourant/50.0;
     static unsigned char subdiv=0;
     unsigned char payload[16];
     payload[0]=BREAK_UINT32(g_longTimeStamp,3);
@@ -568,5 +602,37 @@ void Timer5CallBack(void)
     {
         subdiv=0;
         respiratorState.pressure1=D6FPress_meas();
+        
+        
+        if(boardVersion3Moteur)
+        {
+            
+        }
+        else
+        {
+            char sign=1;
+            float diffPression=respiratorState.pressure1;
+            if(diffPression<0)
+                sign=-1;
+            else
+                sign=1;
+            
+            float vitesse = sqrt(2*ABS(diffPression)/1.23)*(float)sign;
+            respiratorState.debitCourant=vitesse*surface;
+            
+            if(vitesse>=0.01)
+                respiratorState.volumeCourant+=(respiratorState.debitCourant*1000)/25.0;
+        }
     }
+}
+
+void CalculateRespiratorParameters(void)
+{
+    //respiratorState.periode=2000000;    //(en us)
+    
+    //
+    double periode=60000/respiratorState.cyclesPerMinute;       //en ms
+    respiratorState.attenteHaut=0.3*periode;
+    respiratorState.attenteBas=0.5*periode;
+    
 }

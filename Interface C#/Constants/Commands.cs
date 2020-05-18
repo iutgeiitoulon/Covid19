@@ -19,6 +19,7 @@ namespace Constants
         SetStepsOffsetFromUp = 5,
         SetStepsOffsetFromDown =6,
         SetAmplitudeSteps=7,
+        SetCyclesPerMin=8,
         ChangeSpeed=20,
         SetPauseTimeUp=21,
         SetPauseTimeDown=22,

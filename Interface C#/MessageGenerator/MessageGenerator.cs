@@ -106,6 +106,14 @@ namespace MessageGenerator
             OnMessageToRespirator((Int16)Commands.SetVlimit, 4, payload);
         }
 
+        public void GenerateMessageSetCyclesPerMin(object sender, Int32EventArgs e)
+        {
+            byte[] payload = new byte[1];
+            payload[0] = Convert.ToByte(e.value);
+
+            OnMessageToRespirator((Int16)Commands.SetCyclesPerMin, 1, payload);
+        }
+
         //Output events
         public event EventHandler<MessageToRespirateurArgs> OnMessageToRespirateurGeneratedEvent;
         public virtual void OnMessageToRespirator(Int16 msgFunction, Int16 msgPayloadLength, byte[] msgPayload)

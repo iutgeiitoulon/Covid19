@@ -8,6 +8,7 @@
         xmlns:oscillo="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"
         mc:Ignorable="d"
         Title="Interface Respirateur" Height="858" Width="1044">
+
     <Grid x:Name="GridApplication" Background="#222222">
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>

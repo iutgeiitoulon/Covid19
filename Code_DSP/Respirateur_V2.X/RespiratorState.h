@@ -36,6 +36,7 @@ typedef struct robotStateBITS {
         struct {
             float pressure1;
             float pressure2;
+            float volume;
             
             double pLimite;             //Seuil pression limite
             double vLimite;             //Seuil volume limite
@@ -47,6 +48,7 @@ typedef struct robotStateBITS {
             long stepsOffsetUp;
             long stepsOffsetDown;
             long amplitude;           //474 pas
+            unsigned char cyclesPerMinute;
             double vitesse;
             unsigned char sensMoteur1;
             unsigned char sensMoteur2;

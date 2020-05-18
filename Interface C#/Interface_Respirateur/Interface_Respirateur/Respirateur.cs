@@ -13,6 +13,8 @@ using ExtendedSerialPort;
 using System.IO.Ports;
 using MessageDecoder;
 using MessageEncoder;
+using System.Windows.Threading;
+
 
 namespace Interface_Respirateur
 {
@@ -62,7 +64,7 @@ namespace Interface_Respirateur
             
 
             StartInterface();
-
+            
 
             lock (ExitLock)
             {
@@ -75,15 +77,17 @@ namespace Interface_Respirateur
         static Thread t1;
         static void StartInterface()
         {
-            t1 = new Thread(() =>
-            {
-                //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
-                respirateurInterfaceMonitor = new WpfRespirateurMonitor();
-                respirateurInterfaceMonitor.Loaded += RegisterRespirateurMonitorEvents;
-                respirateurInterfaceMonitor.ShowDialog();
-            });
-            t1.SetApartmentState(ApartmentState.STA);
+            
+                t1 = new Thread(() =>
+                {
+                    //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
+                    respirateurInterfaceMonitor = new WpfRespirateurMonitor();
+                    respirateurInterfaceMonitor.Loaded += RegisterRespirateurMonitorEvents;
+                    respirateurInterfaceMonitor.ShowDialog();
+                });
+                t1.SetApartmentState(ApartmentState.STA);
             t1.Start();
+           
         }
 
         static Thread t2;
@@ -92,26 +96,20 @@ namespace Interface_Respirateur
         {
             if (!t2Started)
             {
-                t2 = new Thread(() =>
-                {
-                //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
-                respirateurInterface = new WpfRespirateurInterface();
-                    
-                    try
+               
+                    t2 = new Thread(() =>
                     {
+                        //Attention, il est nécessaire d'ajouter PresentationFramework, PresentationCore, WindowBase and your wpf window application aux ressources.
+                        respirateurInterface = new WpfRespirateurInterface();
 
-                        respirateurInterface.Loaded += RegisterRespirateurEvents;
+                        //respirateurInterface.Loaded += RegisterRespirateurEvents;
                         respirateurInterface.ShowDialog();
-                    }
-                    catch
-                    {
 
-                    }
-                    t2Started = false;
-                });
-                t2.SetApartmentState(ApartmentState.STA);
-                t2.Start();
-                t2Started = true;
+                        t2Started = false;
+                    });
+                    t2.SetApartmentState(ApartmentState.STA);
+                    t2.Start();
+                    t2Started = true;
             }
         }
         static void RegisterRespirateurEvents(object sender, EventArgs e)
@@ -140,6 +138,9 @@ namespace Interface_Respirateur
         static void RegisterRespirateurMonitorEvents(object sender, EventArgs e)
         {
             respirateurInterfaceMonitor.OnStartStopFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSartStop;
+            respirateurInterfaceMonitor.OnSetCyclesPerMinromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetCyclesPerMin;
+            respirateurInterfaceMonitor.OnSetVlimitFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetVlimit;
+            respirateurInterfaceMonitor.OnSetPlimitFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetPlimit;
             respirateurInterfaceMonitor.OnStartAdvancedInterfaceFromInterfaceGeneratedEvent += StartAdvancedInterface;
 
             msgProcessor.OnPressureDataFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.UpdateVolumeDataOnGraph;

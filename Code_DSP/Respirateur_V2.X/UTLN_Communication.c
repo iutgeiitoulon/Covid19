@@ -50,6 +50,8 @@
 #include "Define.h"
 #define BUFFER_TX_UART_SIZE 128
 extern unsigned long autoStopMotorOnNoCommandTimeStamp;
+
+extern void CalculateRespiratorParameters(void);
 /***************************************************************************************************
  * CONSTANTS
  ***************************************************************************************************/
@@ -260,6 +262,14 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
             getBytesFromInt32(msgTxUARTPayload, 0, respiratorState.amplitude);
             msgTxUARTPayloadLength=4;
             break; 
+        //Set Cycles/min
+        case 0x0008:
+            blockMessage=0;
+            respiratorState.cyclesPerMinute=payload[0];
+            msgTxUARTPayload[0]=respiratorState.cyclesPerMinute;
+            CalculateRespiratorParameters();
+            msgTxUARTPayloadLength=1;
+            break;            
         //Set Speed
         case 0x0014:
             blockMessage=0;
@@ -292,36 +302,11 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
         //Set P Limit
         case 0x0018:
             blockMessage=0;
-            respiratorState.pLimite=(double)(getFloat(payload,0));
+            respiratorState.pLimite=(double)(getFloat(payload,0))*100;
             getBytesFromFloat(msgTxUARTPayload, 0, respiratorState.pLimite);
             msgTxUARTPayloadLength=4;
             break;                  
-        // ToggleLed
-        case 0x0008:
-                switch(payload[0])
-                {
-                #ifdef HW_LED1
-                case 1:
-                        _LED_V=!_LED_V;
-                        msgTxUARTPayload[pos++]=(unsigned char)_LED_V;
-                        break;
-                #endif
-                #ifdef HW_LED2
-                case 2:
-                        _LED_O=!_LED_O;
-                        msgTxUARTPayload[pos++]=(unsigned char)_LED_O;
-                        break;
-                #endif
-                #ifdef HW_LED3
-                case 3:
-                        _LED_B=!_LED_B;
-                        msgTxUARTPayload[pos++]=(unsigned char)_LED_B;
-                        break;
-                #endif
-                }
-                //On prepare un message
-                msgTxUARTPayloadLength = pos;
-                break;
+
 
         // SetLedOn
         case 0x09:
