@@ -142,11 +142,14 @@ namespace Interface_Respirateur
             respirateurInterfaceMonitor.OnSetVlimitFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetVlimit;
             respirateurInterfaceMonitor.OnSetPlimitFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetPlimit;
             respirateurInterfaceMonitor.OnStartAdvancedInterfaceFromInterfaceGeneratedEvent += StartAdvancedInterface;
+            respirateurInterfaceMonitor.OnSetModeFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageSetMode;
+            respirateurInterfaceMonitor.OnInitMachineFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageInitMachine;
 
-            msgProcessor.OnPressureDataFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.UpdateVolumeDataOnGraph;
 
             //Callback (confirmation reglage parametres)
             msgProcessor.OnStartStopCallBackFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.ActualizeStartStopButton;
+            msgProcessor.OnSetModeCallBackFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.ActualizeMode;
+            msgProcessor.OnPressureDataFromRespiratorGeneratedEvent += respirateurInterfaceMonitor.UpdateVolumeDataOnGraph;
         }
     }
 }

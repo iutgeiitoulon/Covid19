@@ -23,6 +23,11 @@ namespace EventArgsLibrary
         public double Value { get; set; }
     }
 
+    public class ByteEventArgs : EventArgs
+    {
+        public byte Value { get; set; }
+    }
+
 
     public class MotorDoStepsArgs : EventArgs
     {

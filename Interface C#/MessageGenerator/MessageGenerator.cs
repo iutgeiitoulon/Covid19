@@ -106,6 +106,22 @@ namespace MessageGenerator
             OnMessageToRespirator((Int16)Commands.SetVlimit, 4, payload);
         }
 
+        public void GenerateMessageSetMode(object sender, BoolEventArgs e)
+        {
+            byte[] payload = new byte[1];
+            payload[0] = (byte)((e.value) ? 1 : 0);
+
+            OnMessageToRespirator((Int16)Commands.SetMode, 1, payload);
+        }
+
+        public void GenerateMessageInitMachine(object sender, EventArgs e)
+        {
+            byte[] payload = new byte[1];
+            payload[0] = 0;
+
+            OnMessageToRespirator((Int16)Commands.Init, 1, payload);
+        }
+
         public void GenerateMessageSetCyclesPerMin(object sender, Int32EventArgs e)
         {
             byte[] payload = new byte[1];

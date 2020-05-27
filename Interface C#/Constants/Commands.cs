@@ -25,6 +25,8 @@ namespace Constants
         SetPauseTimeDown=22,
         SetVlimit = 23,
         SetPlimit = 24,
+        SetMode = 25,
+        Init=26,
 
 
         PressureDataFromRespirator =100,

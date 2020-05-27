@@ -52,6 +52,7 @@
 extern unsigned long autoStopMotorOnNoCommandTimeStamp;
 
 extern void CalculateRespiratorParameters(void);
+extern void InitMachine(void);
 /***************************************************************************************************
  * CONSTANTS
  ***************************************************************************************************/
@@ -305,69 +306,27 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
             respiratorState.pLimite=(double)(getFloat(payload,0))*100;
             getBytesFromFloat(msgTxUARTPayload, 0, respiratorState.pLimite);
             msgTxUARTPayloadLength=4;
-            break;                  
-
-
-        // SetLedOn
-        case 0x09:
-                switch(payload[0])
-                {
-                    #ifdef HW_LED1
-                    case 1:
-                            _LED_V=1;
-                            msgTxUARTPayload[pos++]=(unsigned char)_LED_V;
-                            break;
-                    #endif
-                    #ifdef HW_LED2
-                    case 2:
-                            _LED_O=1;
-                            msgTxUARTPayload[pos++]=(unsigned char)_LED_O;
-                            break;
-                    #endif
-                    #ifdef HW_LED3
-                    case 3:
-                            _LED_B=1;
-                            msgTxUARTPayload[pos++]=(unsigned char)_LED_B;
-                            break;
-                    #endif
-                    default:
-                        break;
-                }
-                //On prepare un message
-                msgTxUARTPayloadLength = pos;
-                msgTxUARTPayload[0]=(unsigned char)1;
-                break;
-
-        // SetLedOff
-        case 0x0A:
-                switch(payload[0])
-                {
-                    #ifdef HW_LED1
-                    case 1:
-                            _LED_V=0;
-                            msgTxUARTPayload[pos++]=(unsigned char)_LED_V;
-                            break;
-                    #endif
-                    #ifdef HW_LED2
-                    case 2:
-                            _LED_O=0;
-                            msgTxUARTPayload[pos++]=(unsigned char)_LED_O;
-                            break;
-                    #endif
-                    #ifdef HW_LED3
-                    case 3:
-                            _LED_B=0;
-                            msgTxUARTPayload[pos++]=(unsigned char)_LED_B;
-                            break;
-                    #endif
-                    default:
-                        break;
-                }
-                //On prepare un message
-                msgTxUARTPayloadLength = pos;
-                msgTxUARTPayload[0]=(unsigned char)1;
-                break;
-
+            break;        
+        //Set Mode    
+        case 0x0019:
+            blockMessage=0;
+            if(payload[0])
+            {
+                respiratorState.isAssistanceMode=1;
+            }
+            else
+            {
+                respiratorState.isAssistanceMode=0;
+            }
+            msgTxUARTPayload[0]=respiratorState.isAssistanceMode;
+            msgTxUARTPayloadLength=1;
+            break;
+        //Init
+        case 0x001A:
+            blockMessage=1;
+            InitMachine();
+            break;    
+            
         case 0x79:
             blockMessage=1;
             g_longTimeStamp=payload[0] + ((unsigned long)payload[1]<<8) + ((unsigned long)payload[2]<<16) + ((unsigned long)payload[3]<<24);
@@ -375,7 +334,6 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
             msgTxUARTPayloadLength = 0;
             break;
             
-
 
         case EMERGENCY_STOP:
             blockMessage=1;

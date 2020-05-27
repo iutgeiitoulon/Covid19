@@ -14,6 +14,11 @@
                 <MenuItem Name="MenuItemUsePitot4" Header="_Use Pitot 4mm" IsCheckable="True" IsChecked="False" Checked="MenuItemUsePitot4_Checked" />
                 <MenuItem Name="MenuItemUsePitot6" Header="_Use Pitot 6mm" IsCheckable="True" IsChecked="True" Checked="MenuItemUsePitot6_Checked" />
                 <MenuItem Name="MenuItemAdvanced" Header="_Advanced Interface" Click="MenuItemAdvanced_Click" />
+                <MenuItem Name="MenuItemInit" Header="_Re-Init Machine" Click="MenuItemInit_Click" />
+            </MenuItem>
+            <MenuItem Header="_Mode">
+                <MenuItem Name="MenuItemReanimation" Header="_Reanimation" IsCheckable="True" IsChecked="True" Click="MenuItemReanimation_Click" />
+                <MenuItem Name="MenuItemAssistance" Header="_Assistance" IsCheckable="True" IsChecked="false" Click="MenuItemAssistance_Click"  />
             </MenuItem>
         </Menu>
 
@@ -105,7 +110,7 @@
                 </Viewbox>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="6" HorizontalAlignment="Stretch"  Margin="10,10,10,10" Grid.Row="5" VerticalAlignment="Stretch" Foreground="#FFECECF2" Header="vitesse">
+        <GroupBox Name="groupBoxCycles" Grid.Column="6" HorizontalAlignment="Stretch"  Margin="10,10,10,10" Grid.Row="5" VerticalAlignment="Stretch" Foreground="#FFECECF2" Header="vitesse">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>

@@ -334,7 +334,7 @@ void SetTimerInterruptPriority(TIMER_ID id, bool interruptEnable, uint8 interrup
  */
 void RegisterTimerCallBack(TIMER_ID id, TIMER_CallBack callback)
 {
-    if(id >0 && id <= TIMER_COUNT)
+    if(id >=0 && id < TIMER_COUNT)
         if(callback!=NULL)
             callBack[id]=callback;
 }

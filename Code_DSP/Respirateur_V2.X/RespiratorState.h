@@ -34,6 +34,8 @@
 typedef struct robotStateBITS {
     union {
         struct {
+            unsigned char isAssistanceMode;
+            
             float pressure1;
             float pressure2;
             float volume;
@@ -41,7 +43,7 @@ typedef struct robotStateBITS {
             double pLimite;             //Seuil pression limite
             double vLimite;             //Seuil volume limite
             double attenteHaut;         //Attente haut en miliseconde
-            
+            double tempsMontee;         //Indication sur le temps de montée en pression max
             double debitCourant;               //Debit en M3/s
             double volumeCourant;               //Volume en M3
             double attenteBas;         //Attente bas en miliseconde
@@ -53,9 +55,14 @@ typedef struct robotStateBITS {
             unsigned char sensMoteur1;
             unsigned char sensMoteur2;
             unsigned char sensMoteur3;
-            double cptMoteur1;
-            double cptMoteur2;
-            double cptMoteur3;
+            double positionMoteur1;
+            double positionMoteur2;
+            double positionMoteur3;
+            double targetMoteur1;
+            double targetMoteur2;
+            double targetMoteur3;
+            double targetMoteur4;
+            double targetMoteur5; 
             
             
             unsigned long periode;

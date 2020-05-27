@@ -45,13 +45,13 @@ namespace WpfRespirateur_Interface_Monitor
             oscilloVolume.AddOrUpdateLine(0, 100, "Volume");
             oscilloVolume.ChangeLineColor(0, Colors.Red);
             oscilloVolume.SetAutoScaleY(false);
-            oscilloVolume.SetYAxisScale(0, 1.2);
+            oscilloVolume.SetYAxisScale(0, 2);//1.2);
 
             oscilloPression.SetTitle("Courbe pression");
             oscilloPression.AddOrUpdateLine(0, 100, "Pression");
             oscilloPression.ChangeLineColor(0, Colors.Blue);
             oscilloPression.SetAutoScaleY(false);
-            oscilloPression.SetYAxisScale(0, 50);
+            oscilloPression.SetYAxisScale(-5, 45);
             
 
             timerAffichage = new DispatcherTimer();
@@ -209,7 +209,6 @@ namespace WpfRespirateur_Interface_Monitor
         bool usePitot4mm = false;
         public void UpdateVolumeDataOnGraph(object sender, RespirateurDataEventArgs e)
         {
-            oscilloVolume.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, volume);      //Tube pito
             oscilloPression.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor2/100);     //Pression patient (mmH2o)
             //double pression2 = (e.pressureSensor2 - 1.65+ 0.0075)/3.0 * (100000 / 0.085) ;
             double rho = 1.23;
@@ -238,6 +237,7 @@ namespace WpfRespirateur_Interface_Monitor
                 volume += (debit*1000) / 50;
             else
                 volume = 0;
+            oscilloVolume.AddPointToLine(0, e.EmbeddedTimeStampInMs / 1000.0, e.pressureSensor1);      //Tube pito
         }
 
 
@@ -268,7 +268,80 @@ namespace WpfRespirateur_Interface_Monitor
                     labelSessionStart.Content = "Session Start:" + DateTime.Now.ToString();
             }));
         }
-        
+
+        //Methode appelée sur evenement (event) provenant du port Serie.
+        //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
+        public void ActualizeCyclesPerMinute(object sender, ByteEventArgs e)
+        {
+            //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
+            //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
+            //Sachant que chaque objet UI (d'interface graphique) dispose d'un dispatcher qui permet d'executer un delegué (une methode) depuis son propre thread.
+            //La difference entre un Invoke et un beginInvoke est le fait que le Invoke attend la fin de l'execution de l'action avant de sortir.
+            labelCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+            {
+                labelCycles.Content = e.Value.ToString();
+                cycles = e.Value;
+            }));
+        }
+
+        //Methode appelée sur evenement (event) provenant du port Serie.
+        //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
+        public void ActualizeMode(object sender, BoolEventArgs e)
+        {
+            //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
+            //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
+            //Sachant que chaque objet UI (d'interface graphique) dispose d'un dispatcher qui permet d'executer un delegué (une methode) depuis son propre thread.
+            //La difference entre un Invoke et un beginInvoke est le fait que le Invoke attend la fin de l'execution de l'action avant de sortir.
+            if(e.value)
+            {
+                //On est bien en mode Assistance
+                if (MenuItemReanimation != null)
+                {
+                    MenuItemReanimation.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                    {
+                        MenuItemReanimation.IsChecked = false;
+                    }));
+
+                }
+
+                MenuItemAssistance.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                {
+                    MenuItemAssistance.IsChecked = true;
+                }));
+
+                if (groupBoxCycles != null)
+                {
+                    groupBoxCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                    {
+                        groupBoxCycles.Visibility = Visibility.Hidden;
+                    }));
+                }
+            }
+            else
+            {
+                //On est pas en mode Assistance
+                if (MenuItemAssistance != null)
+                {
+                    MenuItemAssistance.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                    {
+                        MenuItemAssistance.IsChecked = false;
+                    }));
+                }
+
+                MenuItemReanimation.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                {
+                    MenuItemReanimation.IsChecked = true;
+                }));
+
+                if (groupBoxCycles != null)
+                {
+                    groupBoxCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                    {
+                        groupBoxCycles.Visibility = Visibility.Visible;
+                    }));
+                }
+            }
+        }
         #endregion
 
         #region OutputEvents
@@ -393,6 +466,26 @@ namespace WpfRespirateur_Interface_Monitor
                 handler(this, new Int32EventArgs { value = val });
             }
         }
+
+        public event EventHandler<BoolEventArgs> OnSetModeFromInterfaceGeneratedEvent;
+        public virtual void OnSetModeFromInterface(bool isAssistance)
+        {
+            var handler = OnSetModeFromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new BoolEventArgs { value = isAssistance });
+            }
+        }
+
+        public event EventHandler<EventArgs> OnInitMachineFromInterfaceGeneratedEvent;
+        public virtual void OnInitMachineFromInterface()
+        {
+            var handler = OnInitMachineFromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new EventArgs {});
+            }
+        }
         #endregion
 
         bool isPilotageVolumeChecked = true;
@@ -461,6 +554,30 @@ namespace WpfRespirateur_Interface_Monitor
         private void MenuItemAdvanced_Click(object sender, RoutedEventArgs e)
         {
                 OnStartAdvancedInterfaceFromInterface();
+        }
+
+
+        private void MenuItemInit_Click(object sender, RoutedEventArgs e)
+        {
+            OnInitMachineFromInterface();
+        }
+
+        private void MenuItemReanimation_Click(object sender, RoutedEventArgs e)
+        {
+            if (MenuItemAssistance != null)
+                MenuItemAssistance.IsChecked = false;
+            if (MenuItemReanimation != null)
+                MenuItemReanimation.IsChecked = false;
+            OnSetModeFromInterface(false);
+        }
+
+        private void MenuItemAssistance_Click(object sender, RoutedEventArgs e)
+        {
+            if (MenuItemAssistance != null)
+                MenuItemAssistance.IsChecked = false;
+            if (MenuItemReanimation != null)
+                MenuItemReanimation.IsChecked = false;
+            OnSetModeFromInterface(true);
         }
     }
 }

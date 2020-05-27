@@ -72,6 +72,10 @@ namespace MessageProcessor
                     offset = (payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24);
                     OnSetOffsetDownCallBackFromRespirator(offset);
                     break;
+                case (short)Commands.SetCyclesPerMin:
+                    byte cyclesPerMin =  payload[0];
+                    OnSetOffsetDownCallBackFromRespirator(cyclesPerMin);
+                    break;
                 case (short)Commands.ChangeSpeed:
                     tab2 = payload.GetRange(0, 4);
                     float speed = tab2.GetFloat();
@@ -92,6 +96,12 @@ namespace MessageProcessor
                     break;
 
 
+                case (short)Commands.SetMode:
+                    if (payload[0]==1)
+                        OnSetModeCallBackFromRespirator(true);
+                    else
+                        OnSetModeCallBackFromRespirator(false);
+                    break;
 
                 case (short)Commands.ErrorTextMessage:
                     string errorMsg = Encoding.UTF8.GetString(payload);
@@ -149,6 +159,25 @@ namespace MessageProcessor
             if (handler != null)
             {
                 handler(this, new Int32EventArgs { value = offset });
+            }
+        }
+        public event EventHandler<ByteEventArgs> OnSetCyclesPerMinCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetCyclesPerMinCallBackFromRespirator(byte cycles)
+        {
+            var handler = OnSetCyclesPerMinCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new ByteEventArgs { Value = cycles });
+            }
+        }
+
+        public event EventHandler<BoolEventArgs> OnSetModeCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetModeCallBackFromRespirator(bool isAssistance)
+        {
+            var handler = OnSetModeCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new BoolEventArgs { value = isAssistance });
             }
         }
 
