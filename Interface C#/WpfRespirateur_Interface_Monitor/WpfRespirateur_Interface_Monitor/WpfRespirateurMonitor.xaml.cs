@@ -39,16 +39,16 @@ namespace WpfRespirateur_Interface_Monitor
         public WpfRespirateurMonitor()
         {
             InitializeComponent();
-            RadioButtonVolume.IsChecked = isPilotageVolumeChecked;
+            //RadioButtonVolume.IsChecked = isPilotageVolumeChecked;
 
             oscilloVolume.SetTitle("Courbe Volume");
-            oscilloVolume.AddOrUpdateLine(0, 100, "Volume");
+            oscilloVolume.AddOrUpdateLine(0, 500, "Volume");
             oscilloVolume.ChangeLineColor(0, Colors.Red);
             oscilloVolume.SetAutoScaleY(false);
             oscilloVolume.SetYAxisScale(0, 2);//1.2);
 
             oscilloPression.SetTitle("Courbe pression");
-            oscilloPression.AddOrUpdateLine(0, 100, "Pression");
+            oscilloPression.AddOrUpdateLine(0, 500, "Pression");
             oscilloPression.ChangeLineColor(0, Colors.Blue);
             oscilloPression.SetAutoScaleY(false);
             oscilloPression.SetYAxisScale(-5, 45);
@@ -58,7 +58,11 @@ namespace WpfRespirateur_Interface_Monitor
             timerAffichage.Interval = new TimeSpan(0,0,0,0,100);
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
-   
+
+            labelSeuilDetection.Visibility = Visibility.Hidden;
+            labelSeuilDetectionVal.Visibility = Visibility.Hidden;
+            sliderSeuil.Visibility = Visibility.Hidden;
+
             //Among other settings, this code may be used
             CultureInfo ci = CultureInfo.CurrentUICulture;
 
@@ -309,13 +313,25 @@ namespace WpfRespirateur_Interface_Monitor
                     MenuItemAssistance.IsChecked = true;
                 }));
 
-                if (groupBoxCycles != null)
+                labelSeuilDetection.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
                 {
-                    groupBoxCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
-                    {
-                        groupBoxCycles.Visibility = Visibility.Hidden;
-                    }));
-                }
+                    labelSeuilDetection.Visibility = Visibility.Visible;
+                }));
+                labelSeuilDetectionVal.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                {
+                    labelSeuilDetectionVal.Visibility = Visibility.Visible;
+                }));
+                sliderSeuil.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                {
+                    sliderSeuil.Visibility = Visibility.Visible;
+                }));
+                //if (groupBoxCycles != null)
+                //{
+                //    groupBoxCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                //    {
+                //        groupBoxCycles.Visibility = Visibility.Hidden;
+                //    }));
+                //}
             }
             else
             {
@@ -333,14 +349,67 @@ namespace WpfRespirateur_Interface_Monitor
                     MenuItemReanimation.IsChecked = true;
                 }));
 
-                if (groupBoxCycles != null)
+                labelSeuilDetection.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
                 {
-                    groupBoxCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
-                    {
-                        groupBoxCycles.Visibility = Visibility.Visible;
-                    }));
-                }
+                    labelSeuilDetection.Visibility = Visibility.Hidden;
+                }));
+                labelSeuilDetectionVal.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                {
+                    labelSeuilDetectionVal.Visibility = Visibility.Hidden;
+                }));
+                sliderSeuil.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                {
+                    sliderSeuil.Visibility = Visibility.Hidden;
+                }));
+                //if (groupBoxCycles != null)
+                //{
+                //    groupBoxCycles.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+                //    {
+                //        groupBoxCycles.Visibility = Visibility.Visible;
+                //    }));
+                //}
             }
+        }
+
+        //Methode appelée sur evenement (event) provenant du port Serie.
+        //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
+        public void ActualizeSeuilDetection(object sender, DoubleArgs e)
+        {
+            //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
+            //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
+            //Sachant que chaque objet UI (d'interface graphique) dispose d'un dispatcher qui permet d'executer un delegué (une methode) depuis son propre thread.
+            //La difference entre un Invoke et un beginInvoke est le fait que le Invoke attend la fin de l'execution de l'action avant de sortir.
+            labelSeuilDetectionVal.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+            {
+                labelSeuilDetectionVal.Content = (e.Value/100).ToString("F2");
+            }));
+        }
+
+        //Methode appelée sur evenement (event) provenant du port Serie.
+        //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
+        public void ActualizeVLimite(object sender, DoubleArgs e)
+        {
+            //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
+            //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
+            //Sachant que chaque objet UI (d'interface graphique) dispose d'un dispatcher qui permet d'executer un delegué (une methode) depuis son propre thread.
+            //La difference entre un Invoke et un beginInvoke est le fait que le Invoke attend la fin de l'execution de l'action avant de sortir.
+            labelVolumeCurrentVal.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+            {
+                labelVolumeCurrentVal.Content = "Current value: "+(e.Value).ToString("F2") +" L";
+            }));
+        }
+        //Methode appelée sur evenement (event) provenant du port Serie.
+        //Cette methode est donc appelée depuis le thread du port Serie. Ce qui peut poser des problemes d'acces inter-thread
+        public void ActualizePLimite(object sender, DoubleArgs e)
+        {
+            //La solution consiste a passer par un delegué qui executera l'action a effectuer depuis le thread concerné.
+            //Ici, l'action a effectuer est la modification d'un bouton. Ce bouton est un objet UI, et donc l'action doit etre executée depuis un thread UI.
+            //Sachant que chaque objet UI (d'interface graphique) dispose d'un dispatcher qui permet d'executer un delegué (une methode) depuis son propre thread.
+            //La difference entre un Invoke et un beginInvoke est le fait que le Invoke attend la fin de l'execution de l'action avant de sortir.
+            labelPressionCurrentVal.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
+            {
+                labelPressionCurrentVal.Content = "Current value: " + (e.Value/100).ToString();
+            }));
         }
         #endregion
 
@@ -486,25 +555,35 @@ namespace WpfRespirateur_Interface_Monitor
                 handler(this, new EventArgs {});
             }
         }
+
+        public event EventHandler<DoubleArgs> OnChangeSeuilFromInterfaceGeneratedEvent;
+        public virtual void OnChangeSeuilFromInterface(double seuil)
+        {
+            var handler = OnChangeSeuilFromInterfaceGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = seuil });
+            }
+        }
         #endregion
 
         bool isPilotageVolumeChecked = true;
         private void RadioButtonVolume_Click(object sender, RoutedEventArgs e)
         {
-            if(!isPilotageVolumeChecked)
-            {
-                RadioButtonPression.IsChecked = false;
-                isPilotageVolumeChecked = true;
-            }
+            //if(!isPilotageVolumeChecked)
+            //{
+            //    RadioButtonPression.IsChecked = false;
+            //    isPilotageVolumeChecked = true;
+            //}
         }
 
         private void RadioButtonPression_Click(object sender, RoutedEventArgs e)
         {
-            if (isPilotageVolumeChecked)
-            {
-                RadioButtonVolume.IsChecked = false;
-                isPilotageVolumeChecked = false;
-            }
+            //if (isPilotageVolumeChecked)
+            //{
+            //    RadioButtonVolume.IsChecked = false;
+            //    isPilotageVolumeChecked = false;
+            //}
         }
 
         private void ButtonCycleP_Click(object sender, RoutedEventArgs e)
@@ -578,6 +657,11 @@ namespace WpfRespirateur_Interface_Monitor
             if (MenuItemReanimation != null)
                 MenuItemReanimation.IsChecked = false;
             OnSetModeFromInterface(true);
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            OnChangeSeuilFromInterface(e.NewValue);
         }
     }
 }

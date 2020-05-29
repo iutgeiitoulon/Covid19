@@ -39,6 +39,7 @@ typedef struct robotStateBITS {
             float pressure1;
             float pressure2;
             float volume;
+            float seuilAssistance;
             
             double pLimite;             //Seuil pression limite
             double vLimite;             //Seuil volume limite

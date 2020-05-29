@@ -27,6 +27,7 @@ namespace Constants
         SetPlimit = 24,
         SetMode = 25,
         Init=26,
+        SetSeuilAssistance=27,
 
 
         PressureDataFromRespirator =100,

@@ -130,6 +130,13 @@ namespace MessageGenerator
             OnMessageToRespirator((Int16)Commands.SetCyclesPerMin, 1, payload);
         }
 
+        public void GenerateMessageSetSeuilDetection(object sender, DoubleArgs e)
+        {
+            byte[] payload = new byte[4];
+            payload = ((float)(e.Value*100)).GetBytes();
+
+            OnMessageToRespirator((Int16)Commands.SetSeuilAssistance, 4, payload);
+        }
         //Output events
         public event EventHandler<MessageToRespirateurArgs> OnMessageToRespirateurGeneratedEvent;
         public virtual void OnMessageToRespirator(Int16 msgFunction, Int16 msgPayloadLength, byte[] msgPayload)

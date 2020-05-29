@@ -130,6 +130,7 @@ int main(void)
     respiratorState.periode=2000000;    //(en us)
     respiratorState.cyclesPerMinute=12;
     respiratorState.isAssistanceMode=0;     //Par defaut on est en mode reanimation (cycles auto)
+    respiratorState.seuilAssistance=-30;
     
     /****************************************************************************************************/
     // Determination du type de respirateur (1 moteur VS 3 Moteurs)
@@ -139,7 +140,9 @@ int main(void)
         boardVersion3Moteur=false;
         surface=7.26/100000;
         CalculateRespiratorParameters();
-        RegisterTimerWithCallBack(TIMER2_ID, 1000000.0, Timer2CallBack, true, 3, 1);   //Time base pulse OC
+      //  RegisterTimerWithCallBack(TIMER2_ID, 1000000.0, Timer2CallBack, true, 3, 1);   //Time base pulse OC
+        respiratorState.amplitude=600;
+        vitesseMaxMoteur=1300;
     }
     else
     {
@@ -184,18 +187,11 @@ int main(void)
             respiratorState.debitCourant=vitesse*0.0009;
         }
         
-        //Machine a etat principale (gere les deux respirateurs)
-        if(boardVersion3Moteur)
-        {
-            StateMachineRespirateur3Moteurs();
-            StateMachineMoteur1();
-            StateMachineMoteur2();
-            StateMachineMoteur3();
-        }
-        else
-        {
-            StateMachineRespirateurBavu();
-        }
+
+        StateMachineRespirateur3Moteurs();
+        StateMachineMoteur1();
+        StateMachineMoteur2();
+        StateMachineMoteur3();
     } 
 }// fin main
 
@@ -215,10 +211,23 @@ void StateMachineRespirateur3Moteurs(void)
         {
         case INIT_0:
             nRESET=1;
-            if(initMoteur1Done && initMoteur2Done && initMoteur3Done)
+            if(boardVersion3Moteur)
             {
-                //nRESET=0;       //Desactivation moteurs
-                etat=ARRET;
+                if(initMoteur1Done && initMoteur2Done && initMoteur3Done)
+                {
+                    
+                    //nRESET=0;       //Desactivation moteurs
+                    etat=ARRET;
+                }
+            }
+            else
+            {
+                if(initMoteur1Done)
+                {
+                    SetStateMoteur1(DESCENTE);
+                    etat=ARRET;
+                }
+                    
             }
             break;
             case ARRET:
@@ -245,7 +254,10 @@ void StateMachineRespirateur3Moteurs(void)
             
             //Montee en pression  
             case SOUFFLE:
-                SetStateMoteur1(DESCENTE);
+                if(boardVersion3Moteur)
+                    SetStateMoteur1(DESCENTE);
+                else
+                    SetStateMoteur1(MONTEE);
                 SetStateMoteur2(DESCENTE);
                 SetStateMoteur3(DESCENTE);
                 timeStampDebut=g_longTimeStamp;
@@ -293,7 +305,11 @@ void StateMachineRespirateur3Moteurs(void)
                 break;
                 
         case VIDAGE_MAINTIEN_BAS:
+            if(boardVersion3Moteur)
                 SetStateMoteur1(MONTEE);
+            else
+                SetStateMoteur1(DESCENTE);
+            
                 SetStateMoteur2(MONTEE);
                 SetStateMoteur3(MONTEE);
                 timeStampDebut=g_longTimeStamp;
@@ -302,7 +318,7 @@ void StateMachineRespirateur3Moteurs(void)
             case VIDAGE_EN_COURS:
                 if(respiratorState.isAssistanceMode)
                 {
-                    if((g_longTimeStamp>=timeStampDebut+(unsigned long)respiratorState.attenteBas/2)&&(respiratorState.pressure2<-30))
+                    if((g_longTimeStamp>=timeStampDebut+(unsigned long)respiratorState.attenteBas/2)&&(respiratorState.pressure2<respiratorState.seuilAssistance))
                     {
                         timeStampDebut=g_longTimeStamp;
                         etat=SOUFFLE;
@@ -336,107 +352,6 @@ void StateMachineRespirateur3Moteurs(void)
         }
 }
 
-void StateMachineRespirateurBavu(void)
-{
-    switch(etat)
-        {
-            case ARRET:
-                if(startRespirator)
-                {
-                    nRESET=1;
-                    etat=VIDAGE_MAINTIEN_BAS;
-                    timeStampDebut=g_longTimeStamp;
-                }
-                else
-                {
-                    nRESET=0;       //Desactivation moteurs
-                }
-                //Si on a un ordre de deplacement manuel (depuis interface)
-                if(respiratorState.flagDoStepsCMD)
-                {
-                    etat=MANUAL;
-                    TurnOnOffTimer(TIMER3_ID,1);
-                    nRESET=1;
-                }
-                break;
-            case VIDAGE_MAINTIEN_BAS:
-                if(g_longTimeStamp>=(timeStampDebut+(unsigned long)respiratorState.attenteBas))
-                {
-                    LED_ROUGE=1;
-                    //On commence la montee
-                    respiratorState.sensMoteur1=SENS_MONTEE;
-                    DIR1=SENS_MONTEE;
-                    TurnOnOffTimer(TIMER3_ID,1);
-                    etat=SOUFFLE;
-                }
-                if(!startRespirator)
-                {
-                    TurnOnOffTimer(TIMER3_ID,0);
-                    etat=ARRET;
-                }
-                break;
-            //Montee en pression    
-            case SOUFFLE:
-                if(flagFinMontee)
-                {
-                    LED_BLANCHE=0;
-                    LED_ROUGE=0;
-                    flagFinMontee=0;
-                    timeStampDebut=g_longTimeStamp;
-                    etat=MAINTIEN_PRESSION;
-                }
-                if(respiratorState.pressure2>=respiratorState.pLimite || respiratorState.volumeCourant>=respiratorState.vLimite)
-                {
-                    timeStampDebut=g_longTimeStamp;
-                    etat=MAINTIEN_PRESSION;
-                    TurnOnOffTimer(TIMER3_ID,0);
-                }
-                if(!startRespirator)
-                {
-                    TurnOnOffTimer(TIMER3_ID,0);
-                    etat=ARRET;
-                }
-                break;
-            //Attente en pression
-            case MAINTIEN_PRESSION:
-                if(g_longTimeStamp>=(timeStampDebut+(unsigned long)respiratorState.attenteHaut))
-                {
-                    //On commence la descente
-                    respiratorState.sensMoteur1=SENS_DESCENTE;
-                    DIR1=SENS_DESCENTE;
-                    TurnOnOffTimer(TIMER3_ID,1);
-                    respiratorState.volumeCourant=0;
-                    timeStampDebut=g_longTimeStamp;
-                    etat=VIDAGE;
-                }
-                if(!startRespirator)
-                {
-                    TurnOnOffTimer(TIMER3_ID,0);
-                    etat=ARRET;
-                }
-                break;
-            case VIDAGE:
-                if(flagFinDescente)
-                {
-                    flagFinDescente=0;
-                    
-                    etat=VIDAGE_MAINTIEN_BAS;
-                }
-                if(!startRespirator)
-                {
-                    TurnOnOffTimer(TIMER3_ID,0);
-                    etat=ARRET;
-                }
-                break;          
-            case MANUAL:
-                if(respiratorState.flagDoStepsCMD==0)
-                {
-                    etat=ARRET;
-                }
-                break;
-            default:break;
-        }
-}
 
 
 ETATMoteur etat1=INIT;
@@ -446,7 +361,7 @@ void StateMachineMoteur1(void)
     {
         //Init
         case INIT:
-            SetMotorTargetPos(1, -100000, vitesseMaxMoteur-500);            //On descend
+            SetMotorTargetPos(1, -100000, vitesseMaxMoteur-1000);            //On descend
             etat1=INIT_EN_COURS;
             break;
         //Descente d'init    
@@ -506,7 +421,7 @@ void StateMachineMoteur2(void)
     {
         //Init
         case INIT:
-            SetMotorTargetPos(2, -100000, vitesseMaxMoteur-500);            //On descend
+            SetMotorTargetPos(2, -100000, vitesseMaxMoteur-1000);            //On descend
             etat2=INIT_EN_COURS;
             break;
         //Descente d'init    
@@ -566,7 +481,7 @@ void StateMachineMoteur3(void)
     {
         //Init
         case INIT:
-            SetMotorTargetPos(3, -100000, vitesseMaxMoteur-500);            //On descend
+            SetMotorTargetPos(3, -100000, vitesseMaxMoteur-1000);            //On descend
             etat3=INIT_EN_COURS;
             break;
         //Descente d'init    
@@ -648,7 +563,26 @@ void Timer1CallBack(void)
     }
     else
     {
-        
+        //On controle le moteur 2
+        if(respiratorState.targetMoteur1>respiratorState.positionMoteur1)
+        {
+            DIR1=SENS_MONTEE;
+            STEP1=!STEP1;                   //On genere un pulse sur le moteur 2
+            if(STEP1==0)
+                respiratorState.positionMoteur1++;
+        }
+        else if(respiratorState.targetMoteur1<respiratorState.positionMoteur1)
+        {
+            DIR1=SENS_DESCENTE;
+            STEP1=!STEP1;                   //On genere un pulse sur le moteur 2
+            if(STEP1==0)
+                respiratorState.positionMoteur1--;
+        }
+        else
+        {
+            //On a atteint la cible
+            TurnOnOffTimer(TIMER1_ID,OFF);           //On arrete le timer
+        }
     }
 }
 
@@ -713,37 +647,6 @@ void Timer3CallBack(void)
             TurnOnOffTimer(TIMER3_ID,OFF);           //On arrete le timer
         }
     }
-    else
-    {
-        if(respiratorState.sensMoteur1==SENS_MONTEE)
-        {
-            //Si on es dans le sens positif
-            OC1GeneratePulse(); //On genere un pulse
-            respiratorState.positionMoteur1++;              //On incremente le compteur
-
-            if(respiratorState.positionMoteur1>=respiratorState.amplitude)
-            {
-                flagFinMontee=1;
-                TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
-            }
-        }
-        else
-        {
-            //Si on es dans le sens negatif
-            OC1GeneratePulse(); //On genere un pulse
-            respiratorState.positionMoteur1--;              //On decremente le compteur
-            if(FIN_COURSE1==0)
-            {
-                flagFinDescente=1;
-                TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
-            }
-            if(respiratorState.positionMoteur1<=-30)
-            {
-                flagFinDescente=1;
-                TurnOnOffTimer(TIMER3_ID,OFF);      //On arrete le timer
-            }
-        }
-    }
 }
 
 extern unsigned int antiBlockCounterI2C1;
@@ -781,11 +684,6 @@ void Timer5CallBack(void)
         respiratorState.pressure1=D6FPress_meas();
         
         
-//        if(boardVersion3Moteur)
-//        {
-//            
-//        }
-//        else
         {
             char sign=1;
             float diffPression=respiratorState.pressure1;
@@ -825,7 +723,12 @@ void CalculateRespiratorParameters(void)
     if(!boardVersion3Moteur)
     {
         timerFreq=respiratorState.amplitude/(0.2*periode/1000.0);
-        SetTimerFreq(TIMER3_ID,MIN(timerFreq,750));//Gestion de la vitesse des pas a pas (limite a 750steps a cause du courant )
+       // SetTimerFreq(TIMER3_ID,MIN(timerFreq,750));//Gestion de la vitesse des pas a pas (limite a 750steps a cause du courant )
+        
+        
+        respiratorState.vitesse=MIN(2*respiratorState.amplitude/(0.2*periode/1000.0), vitesseMaxMoteur);//Gestion de la vitesse des pas a pas (limite a 750steps a cause du courant )       
+        respiratorState.tempsMontee=0.2*periode;
+        respiratorState.periode=periode*1000*0.2;
     }
     else
     {

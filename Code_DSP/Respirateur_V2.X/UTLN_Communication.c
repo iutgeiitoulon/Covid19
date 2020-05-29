@@ -326,7 +326,13 @@ void ProcessMessage( unsigned short int command, unsigned short int length, unsi
             blockMessage=1;
             InitMachine();
             break;    
-            
+        //Seuil Assistance    
+        case 0x001B:
+            blockMessage=0;
+            respiratorState.seuilAssistance=(double)(getFloat(payload,0));
+            getBytesFromFloat(msgTxUARTPayload, 0, respiratorState.seuilAssistance);
+            msgTxUARTPayloadLength=4;
+            break;        
         case 0x79:
             blockMessage=1;
             g_longTimeStamp=payload[0] + ((unsigned long)payload[1]<<8) + ((unsigned long)payload[2]<<16) + ((unsigned long)payload[3]<<24);

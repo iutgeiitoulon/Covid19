@@ -466,7 +466,7 @@ void initUART2(void)
     int i;
     for(i = 0; i < 4160; i++)
     {
-        Nop();
+        ;
     }
 }
 

@@ -108,6 +108,22 @@ namespace MessageProcessor
                     //On envois l'event aux abonnés
                     OnErrorTextFromRespirateur(errorMsg);
                     break;
+
+                case (short)Commands.SetPlimit:
+                    tab2 = payload.GetRange(0, 4);
+                    float plimite = tab2.GetFloat();
+                    OnSetPLimiteCallBackFromRespirator(plimite);
+                    break;
+                case (short)Commands.SetVlimit:
+                    tab2 = payload.GetRange(0, 4);
+                    float vLimite = tab2.GetFloat();
+                    OnSetVLimiteCallBackFromRespirator(vLimite);
+                    break;
+                case (short)Commands.SetSeuilAssistance:
+                    tab2 = payload.GetRange(0, 4);
+                    float seuil = tab2.GetFloat();
+                    OnSetPSeuilCallBackFromRespirator(seuil);
+                    break;
                 default: break;
             }
         }
@@ -222,8 +238,35 @@ namespace MessageProcessor
             }
         }
 
+        public event EventHandler<DoubleArgs> OnSetPLimiteCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetPLimiteCallBackFromRespirator(double limit)
+        {
+            var handler = OnSetPLimiteCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = limit });
+            }
+        }
 
-        
+        public event EventHandler<DoubleArgs> OnSetVLimiteCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetVLimiteCallBackFromRespirator(double limit)
+        {
+            var handler = OnSetVLimiteCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = limit });
+            }
+        }
+
+        public event EventHandler<DoubleArgs> OnSetPSeuilCallBackFromRespiratorGeneratedEvent;
+        public virtual void OnSetPSeuilCallBackFromRespirator(double seuil)
+        {
+            var handler = OnSetPSeuilCallBackFromRespiratorGeneratedEvent;
+            if (handler != null)
+            {
+                handler(this, new DoubleArgs { Value = seuil });
+            }
+        }
         public event EventHandler<MsgCounterArgs> OnMessageCounterEvent;
         public virtual void OnMessageCounter(int nbMessageFromImu, int nbMessageFromOdometry)
         {
