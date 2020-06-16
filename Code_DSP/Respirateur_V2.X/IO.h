@@ -21,6 +21,12 @@
 #define FIN_COURSE5 PORTBbits.RB4
 #define FIN_COURSE6 PORTCbits.RC2
 
+#define BUTTON_START FIN_COURSE2        //A remplacer par 2 pour le respi 1 moteur
+#define BUTTON_RESET FIN_COURSE4
+
+#define SW1 1
+#define SW2 2
+
 #define I2C_SCLtris TRISBbits.TRISB8
 #define I2C_SDAtris TRISBbits.TRISB9
 #define _I2C_SCL _LATB8

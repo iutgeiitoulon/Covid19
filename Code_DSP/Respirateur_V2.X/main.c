@@ -19,6 +19,7 @@
 #include "ustv_i2c_interrupt.h"
 #include "UTLN_D6F-PH.h"
 #include "timer.h"
+#include "UTLN_Button.h"
 
 #define SENS_MONTEE 0
 #define SENS_DESCENTE 1
@@ -63,12 +64,15 @@ void SetMotorTargetPos(unsigned char motorID, double target, double speed);
 void SetMotorTarget(unsigned char motorID, unsigned int target);
 void StopMotor(unsigned char motorID);
 void InitMachine(void);
+void StateMachineButton(void);
 
 void Timer1CallBack(void);
 void Timer2CallBack(void);
 void Timer3CallBack(void);
 void Timer4CallBack(void);
 void Timer5CallBack(void);
+void ButtonStartCallback(void);
+void ButtonResetCallback(void);
 void CalculateRespiratorParameters(void);
 
 double surface=0;
@@ -96,6 +100,8 @@ int main(void)
     InitCN();           //Initialisation des pullUP (Change Notification)
     
     //InitADC1();
+    
+
     
     RegisterTimerWithCallBack(TIMER1_ID, 100.0, Timer1CallBack, true, 4, 0);//Gestion de la vitesse des pas a pas
     RegisterTimerWithCallBack(TIMER2_ID, 100.0, Timer2CallBack, true, 4, 0);   //Gestion de la vitesse des pas a pas
@@ -143,12 +149,18 @@ int main(void)
       //  RegisterTimerWithCallBack(TIMER2_ID, 1000000.0, Timer2CallBack, true, 3, 1);   //Time base pulse OC
         respiratorState.amplitude=600;
         vitesseMaxMoteur=1300;
+        ButtonRegisterWithCallBack(SW1, &PORTB, 2, ButtonStartCallback);
+        ButtonRegisterWithCallBack(SW2, &PORTC, 0, ButtonResetCallback);
     }
     else
     {
         surface=9.4/100000;
         CalculateRespiratorParameters();
         respiratorState.amplitude=1250;
+        ButtonRegisterWithCallBack(SW1, &PORTC, 2, ButtonStartCallback);
+
+        ButtonRegisterWithCallBack(SW2, &PORTC, 0, ButtonResetCallback);
+
     }
     /****************************************************************************************************/
     // Boucle Principale
@@ -192,6 +204,7 @@ int main(void)
         StateMachineMoteur1();
         StateMachineMoteur2();
         StateMachineMoteur3();
+        StateMachineButton();
     } 
 }// fin main
 
@@ -205,6 +218,8 @@ void InitMachine(void)
     SetStateMoteur2(INIT);
     SetStateMoteur3(INIT);
 }
+
+unsigned char respiratorStarted=0;
 void StateMachineRespirateur3Moteurs(void)
 {
     switch(etat)
@@ -234,13 +249,13 @@ void StateMachineRespirateur3Moteurs(void)
                 if(startRespirator)
                 {
                     nRESET=1;
-                    
+                    respiratorStarted=true;
                     etat=SOUFFLE;                   
                     timeStampDebut=g_longTimeStamp;
                 }
                 else
                 {
-                    //nRESET=0;       //Desactivation moteurs
+                    respiratorStarted=false;
                 }
                 //Si on a un ordre de deplacement manuel (depuis interface)
                 if(respiratorState.flagDoStepsCMD)
@@ -451,7 +466,7 @@ void StateMachineMoteur2(void)
             etat2=MONTEE_EN_COURS;
             break;
         case MONTEE_EN_COURS:
-            if( FIN_COURSE4==0 || respiratorState.positionMoteur2>= respiratorState.targetMoteur2)
+            if( /*FIN_COURSE4==0 ||*/ respiratorState.positionMoteur2>= respiratorState.targetMoteur2)
             {
                 etat2=ATTENTE; //On passe en attente pour ne pas tout casser
                 initMoteur2Done=1;
@@ -511,7 +526,7 @@ void StateMachineMoteur3(void)
             etat3=MONTEE_EN_COURS;
             break;
         case MONTEE_EN_COURS:
-            if( FIN_COURSE6==0 || respiratorState.positionMoteur3>= respiratorState.targetMoteur3)
+            if( /*FIN_COURSE6==0 ||*/ respiratorState.positionMoteur3>= respiratorState.targetMoteur3)
             {
                 etat3=ATTENTE; //On passe en attente pour ne pas tout casser
                 initMoteur3Done=1;
@@ -532,6 +547,56 @@ void StateMachineMoteur3(void)
 void SetStateMoteur3(ETATMoteur _etat)
 {
     etat3=_etat;
+}
+
+
+unsigned char buttonStartLastState=0;
+unsigned char buttonResetLastState=0;
+void StateMachineButton(void)
+{
+    if((BUTTON_START == SW_ACTIVE_STATE && buttonStartLastState == 0))
+    {
+        //On a un appui sur le bouton SW1
+        buttonStartLastState = 1;
+        #ifdef BUTTON_V2
+            SwPushed(SW1);
+        #else
+            Sw1Pushed();
+        #endif
+    }
+    else if(BUTTON_START == !SW_ACTIVE_STATE && buttonStartLastState == 1)
+    {
+        //On a relaché le bouton SW1
+        buttonStartLastState = 0;
+        #ifdef BUTTON_V2
+            SwReleased(SW1);
+        #else
+            Sw1Released();
+        #endif
+    }
+    
+    if((BUTTON_RESET == SW_ACTIVE_STATE && buttonResetLastState == 0))
+    {
+        //On a un appui sur le bouton SW1
+        buttonResetLastState = 1;
+        #ifdef BUTTON_V2
+            SwPushed(SW2);
+        #else
+            Sw1Pushed();
+        #endif
+    }
+    else if(BUTTON_RESET == !SW_ACTIVE_STATE && buttonResetLastState == 1)
+    {
+        //On a relaché le bouton SW1
+        buttonResetLastState = 0;
+        #ifdef BUTTON_V2
+            SwReleased(SW2);
+        #else
+            Sw1Released();
+        #endif
+    }
+    
+    IsSequenceFinished();
 }
 //</editor-fold>
 
@@ -709,6 +774,19 @@ void Timer5CallBack(void)
     
 }
 //</editor-fold>
+
+void ButtonStartCallback(void)
+{
+    if(!respiratorStarted)
+        startRespirator=true;
+    else
+        startRespirator=false;
+}
+
+void ButtonResetCallback(void)
+{
+    InitMachine();
+}
 
 void CalculateRespiratorParameters(void)
 {
