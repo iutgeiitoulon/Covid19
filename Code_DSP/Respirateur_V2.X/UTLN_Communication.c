@@ -137,6 +137,11 @@ void Uart1DecodeMessage(unsigned char c)
                 rx1ReceivedPayloadIndex = 0;
                 rx1ReceptionState = RECEPTION_CHECKSUM;
             }
+            else if(rx1ReceivedPayloadIndex>rx1ReceivedPayloadLength)
+            {
+                rx1ReceivedPayloadIndex = 0;
+                rx1ReceptionState = RECEPTION_WAIT;
+            }
             break;
         case RECEPTION_CHECKSUM:
             if (c == UartCalculateChecksum(rx1ReceivedFunction,
