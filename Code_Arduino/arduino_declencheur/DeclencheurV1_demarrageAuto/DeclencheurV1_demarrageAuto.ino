@@ -165,6 +165,8 @@ void loop() {
     loading();//Fonction de generation pwm pour charge Boost
     sending();
 
+    //On affiche mission finished a l'ecran, et on bloque l'application
+    missionFinished();
   }
 
 
@@ -1052,8 +1054,8 @@ void missionFinished()
   display.clearDisplay();
   display.setCursor(0, 0);
   display.print("Mission");
-  display.setCursor(12, 0);
-  display.print("Terminée");
+  display.setCursor(0, 15);
+  display.print("Terminee");
   display.display(); 
   
   //On bloque le system jusqu'au prochain cycle d'alimentation
